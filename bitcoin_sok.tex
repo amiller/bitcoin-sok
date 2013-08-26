@@ -1,0 +1,82 @@
+\documentclass[compsoc,conference]{IEEEtran}
+% Add the compsoc option for Computer Society conferences.
+
+\usepackage{cite}
+\usepackage[pdftex]{graphicx}
+\graphicspath{{figures/}}
+%\usepackage[cmex10]{amsmath}
+%\usepackage{algorithmic}
+%\usepackage{array}
+\usepackage{url}
+
+% correct bad hyphenation here
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+
+\begin{document}
+%
+% paper title
+% can use linebreaks \\ within to get better formatting as desired
+\title{SoK: Bitcoin}
+
+
+\author{Authors Removed for Blind Review}
+%% \author{\IEEEauthorblockN{Michael Shell}
+%% \IEEEauthorblockA{School of Electrical and\\Computer Engineering\\
+%% Georgia Institute of Technology\\
+%% Atlanta, Georgia 30332--0250\\
+%% Email: http://www.michaelshell.org/contact.html}
+%% \and
+%% \IEEEauthorblockN{Homer Simpson}
+%% \IEEEauthorblockA{Twentieth Century Fox\\
+%% Springfield, USA\\
+%% Email: homer@thesimpsons.com}
+%% \and
+%% \IEEEauthorblockN{James Kirk\\ and Montgomery Scott}
+%% \IEEEauthorblockA{Starfleet Academy\\
+%% San Francisco, California 96678-2391\\
+%% Telephone: (800) 555--1212\\
+%% Fax: (888) 555--1212}}
+
+% conference papers do not typically use \thanks and this command
+% is locked out in conference mode. If really needed, such as for
+% the acknowledgment of grants, issue a \IEEEoverridecommandlockouts
+% after \documentclass
+
+% for over three affiliations, or if they all won't fit within the width
+% of the page, use this alternative format:
+% 
+%\author{\IEEEauthorblockN{Michael Shell\IEEEauthorrefmark{1},
+%Homer Simpson\IEEEauthorrefmark{2},
+%James Kirk\IEEEauthorrefmark{3}, 
+%Montgomery Scott\IEEEauthorrefmark{3} and
+%Eldon Tyrell\IEEEauthorrefmark{4}}
+%\IEEEauthorblockA{\IEEEauthorrefmark{1}School of Electrical and Computer Engineering\\
+%Georgia Institute of Technology,
+%Atlanta, Georgia 30332--0250\\ Email: see http://www.michaelshell.org/contact.html}
+%\IEEEauthorblockA{\IEEEauthorrefmark{2}Twentieth Century Fox, Springfield, USA\\
+%Email: homer@thesimpsons.com}
+%\IEEEauthorblockA{\IEEEauthorrefmark{3}Starfleet Academy, San Francisco, California 96678-2391\\
+%Telephone: (800) 555--1212, Fax: (888) 555--1212}
+%\IEEEauthorblockA{\IEEEauthorrefmark{4}Tyrell Inc., 123 Replicant Street, Los Angeles, California 90210--4321}}
+
+% use for special paper notices
+\IEEEspecialpapernotice{(Systematization of Knowledge Track)}
+\maketitle
+
+
+\input{abstract}
+\input{introduction}
+\input{how}
+\input{breaks}
+\input{extensions}
+\input{conclusion}
+
+% use section* for acknowledgement
+% \section*{Acknowledgment}
+
+\bibliographystyle{IEEEtran}
+\bibliography{IEEEabrv,bitcoin}
+\end{document}
+
+
