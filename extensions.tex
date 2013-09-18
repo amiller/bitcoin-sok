@@ -16,6 +16,8 @@ Our methodology involves collecting ideas from these and analyzing them.
 
 As a resource to researchers, the discussions and ideas discussed in these venues represent a) what is desired about Bitcoin from its participants, b) what concerns or as of yet unexplained, c) what is thought to be possible or difficult, tradeoffs, which provide starting points for other research, and d) what facilitates actual deployment.
 
+\subsection{Categorization of Extensions}
+
 Suggested improvements to Bitcoin generally fall into the following categories:
 \begin{itemize}
 \item Efficiency improvements
@@ -33,8 +35,9 @@ Due to the need for governance, there are several routes to deploying improvemen
 \item Client changes only, compatible with existing network.
 \end{itemize}
 
-On one hand, the reference client accounts for the largest number of Bitcoin nodes. However as many users turn to hosted bitcoin wallets, it is hard to assign an actual user number to these.
+This imposes a hierarchy of extensions. In our terminology, an extension to Bitcoin may require only modifications to the client - anything that modifies how a user interacts with Bitcoin can count as a modification. We do mean to rule out things like ATMs that interact with the ordinary Bitcoin client. Bitcoin, even its current form, supports a number of extensible uses. Enables protocols between individuals, use Bitcoin in some way.
 
+On one hand, the reference client accounts for the largest number of Bitcoin nodes. However as many users turn to hosted bitcoin wallets, it is hard to assign an actual user number to these.
 
 It's worth identifying that there are many roles in Bitcoin.
 \begin{itemize}
@@ -43,24 +46,21 @@ It's worth identifying that there are many roles in Bitcoin.
 \item Exchanging, mixing, mirroring, merchants, and other services
 \end{itemize}
  
-Assumptions about Bitcoin
+Proposed Bitcoin extensions can be categorized according to what resources they strain:
 \begin{itemize}
-\item History is kept around forever / (Alternative: history is pruned, may be expensive to query)
-\item Verifier state is
+\item Size of blockchain, communication cost per block or per transaction
+\item Cost (time/space) of verifying blocks or transactions de-novo (prepare witness)
+\item Cost (time/space) required to verify
 \end{itemize}
-
 
 Major ideas are the following:
 \begin{itemize}
 \item Relying on Bitcoin as an ordered logfile: auxiliary protocols derived from information in the blockchain. Examples: smartcoin, killerstorm's implementation of colored coins, MasterCoin.
 \item Relying on Bitcoin only for timestamping: CommitCoin
-\item Extending the amount of information that Bitcoin stores in the indexes and in the history log. E.g., ZeroCoin
+\item Extending the amount of information that Bitcoin stores in the indexes and in the history log. E.g., ZeroCoin, Flip-the-chain
+\item ...
 \end{itemize}
 
-We summarize the practicality of improvements Bitcoin by the following attributes:
-\begin{itemize}
-\item (Relation to Bitcoin Current) Does the extension require a modification to Bitcoin?
-\end{itemize}
 
 \cite{jgarzik-smartcoin}
 \cite{miller2001capability}
