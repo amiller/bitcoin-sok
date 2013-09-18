@@ -1,5 +1,79 @@
 \section{Extensions}
 
+Since Bitcoin's inception, a vibrant community of participants and open source developers have suggested improvements and extensions.
+
+\subsection{Community Support}
+Technical discussions and formal presentation of Bitcoin extension ideas are primarily conducted through the following venues:
+\begin{itemize}
+\item Bitcointalk forums
+\item IRC Channels (#bitcoin-dev)
+\item Developer mailing list hosted on sourceforge
+\item Bitcoin wiki
+\item Bitcoin Improvement Proposals
+\end{itemize}
+
+Our methodology involves collecting ideas from these and analyzing them.
+
+As a resource to researchers, the discussions and ideas discussed in these venues represent a) what is desired about Bitcoin from its participants, b) what concerns or as of yet unexplained, c) what is thought to be possible or difficult, tradeoffs, which provide starting points for other research, and d) what facilitates actual deployment.
+
+Suggested improvements to Bitcoin generally fall into the following categories:
+\begin{itemize}
+\item Efficiency improvements
+\item Additional functionality (including privacy for clients)
+\item Increased stability and security (against various threats to the overall network)
+\end{itemize}
+
+We prefer to distinguish between security as it concerns the health/stability of network system overall (e.g., as concerns Proof-of-Stake, Block times) and security of users (e.g., ZeroCoin, better keys or password protection).
+
+Due to the need for governance, there are several routes to deploying improvements to Bitcoin
+\begin{itemize}
+\item Hard-forking changes that change the rule for accepting miner's blocks
+\item Soft-forking changes, that require changes to a substantial number of miners
+\item Peer-to-peer network changes
+\item Client changes only, compatible with existing network.
+\end{itemize}
+
+On one hand, the reference client accounts for the largest number of Bitcoin nodes. However as many users turn to hosted bitcoin wallets, it is hard to assign an actual user number to these.
+
+
+It's worth identifying that there are many roles in Bitcoin.
+\begin{itemize}
+\item Transactions and relaying
+\item Mining, including mining pools
+\item Exchanging, mixing, mirroring, merchants, and other services
+\end{itemize}
+ 
+Assumptions about Bitcoin
+\begin{itemize}
+\item History is kept around forever / (Alternative: history is pruned, may be expensive to query)
+\item Verifier state is
+\end{itemize}
+
+
+Major ideas are the following:
+\begin{itemize}
+\item Relying on Bitcoin as an ordered logfile: auxiliary protocols derived from information in the blockchain. Examples: smartcoin, killerstorm's implementation of colored coins, MasterCoin.
+\item Relying on Bitcoin only for timestamping: CommitCoin
+\item Extending the amount of information that Bitcoin stores in the indexes and in the history log. E.g., ZeroCoin
+\end{itemize}
+
+We summarize the practicality of improvements Bitcoin by the following attributes:
+\begin{itemize}
+\item (Relation to Bitcoin Current) Does the extension require a modification to Bitcoin?
+\end{itemize}
+
 \cite{jgarzik-smartcoin}
 \cite{miller2001capability}
 \cite{szabo1997formalizing,bitcointalk-bondmarkets,wiki-distributedmarkets}
+
+
+\subsection{Altcoins}
+
+
+
+\begin{table}
+\begin{tabular}
+CommitCoin
+ColoredCoins
+\end{tabular}
+\end{table}
