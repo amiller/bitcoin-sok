@@ -1,12 +1,12 @@
 \section{Extensions}
 
-Since Bitcoin's inception, a vibrant community of participants and open source developers have suggested improvements and extensions.
+Since Bitcoin's inception, a vibrant community of participants and open source developers have suggested improvements and extensions. We develop a framework to aggregate and systematically evaluate these contributions.
 
-\subsection{Community Support}
+\subsection{Methodology: Technical Discussion from the Bitcoin Community}
 Technical discussions and formal presentation of Bitcoin extension ideas are primarily conducted through the following venues:
 \begin{itemize}
 \item Bitcointalk forums
-\item IRC Channels (#bitcoin-dev)
+\item IRC Channels (\#bitcoin-dev)
 \item Developer mailing list hosted on sourceforge
 \item Bitcoin wiki
 \item Bitcoin Improvement Proposals
@@ -21,23 +21,11 @@ As a resource to researchers, the discussions and ideas discussed in these venue
 Suggested improvements to Bitcoin generally fall into the following categories:
 \begin{itemize}
 \item Efficiency improvements
-\item Additional functionality (including privacy for clients)
-\item Increased stability and security (against various threats to the overall network)
+\item Additional functionality, to allow new uses
+\item Increased stability and security (against various threats to the overall network, or economic stability)
 \end{itemize}
 
 We prefer to distinguish between security as it concerns the health/stability of network system overall (e.g., as concerns Proof-of-Stake, Block times) and security of users (e.g., ZeroCoin, better keys or password protection).
-
-Due to the need for governance, there are several routes to deploying improvements to Bitcoin
-\begin{itemize}
-\item Hard-forking changes that change the rule for accepting miner's blocks
-\item Soft-forking changes, that require changes to a substantial number of miners
-\item Peer-to-peer network changes
-\item Client changes only, compatible with existing network.
-\end{itemize}
-
-This imposes a hierarchy of extensions. In our terminology, an extension to Bitcoin may require only modifications to the client - anything that modifies how a user interacts with Bitcoin can count as a modification. We do mean to rule out things like ATMs that interact with the ordinary Bitcoin client. Bitcoin, even its current form, supports a number of extensible uses. Enables protocols between individuals, use Bitcoin in some way.
-
-On one hand, the reference client accounts for the largest number of Bitcoin nodes. However as many users turn to hosted bitcoin wallets, it is hard to assign an actual user number to these.
 
 It's worth identifying that there are many roles in Bitcoin.
 \begin{itemize}
@@ -45,6 +33,32 @@ It's worth identifying that there are many roles in Bitcoin.
 \item Mining, including mining pools
 \item Exchanging, mixing, mirroring, merchants, and other services
 \end{itemize}
+A desirable feature may impact some roles but not others. For example, transaction privacy (e.g., Zerocoin) increases the security users but has no direct impact on miners. Likewise, additional costs to miners (or validating nodes) do not necessarily impact users directly.
+
+Due to the need for governance, there are several routes to deploying improvements to Bitcoin. Most proposed extensions to Bitcoin are essentially independent of the mechanism by which they could be integrated. For example, although Zerocoin is proposed as an extension to Bitcoin, it could also be implemented as a concurrent and independent protocol (an ``altcoin''), or as a third party service that Bitcoin users interact with. Other arrangements are possible as well, such as implementing a proposal as an overlay on top of Bitcoin. Another approach, considered a ``gradual soft fork'' involves having the protocol be voluntarily included by miners. If the network of miners appear to reach a de facto consensus on a new extension, it would be easier politically to incorporate this in the mandatory rules. The following are ways in which an extension may be deployed:
+
+\begin{itemize}
+\item Hard-forking ``mandatory'' change, blocks without the modification will be rejected
+\item Soft-forking changes, for subsets of existing possibility, miners can include cooperating data backward-compatibly with blocks.
+\item Peer-to-peer network changes.
+\item Optional client changes only, compatible with existing p2p network.
+\item An external ``oracle,'' implemented as a trusted third party (or shared/quorum of third parties) recognizable by their public key signatures
+\item An altcoin, a separate concurrent protocol
+\end{itemize}
+
+This imposes a hierarchy of extensions. In our terminology, an extension to Bitcoin may require only modifications to the client - anything that modifies how a user interacts with Bitcoin can count as a modification. We do mean to rule out things like ATMs that interact with the ordinary Bitcoin client. Bitcoin, even its current form, supports a number of extensible uses. Enables protocols between individuals, use Bitcoin in some way.
+
+On one hand, the reference client accounts for the largest number of Bitcoin nodes. However as many users turn to hosted bitcoin wallets, it is hard to assign an actual user number to these.
+
+\subsubsection{Interactions between Bitcoin and competitors}
+One of the murkiest areas is understanding Bitcoin's security in the context of the larger ecosystem of similar cryptocurrencies, where multiple separate and concurrent protocols compete for the same computing resources. Bitcoin's security model essentially requires an amount of mining participation larger than any attacker. Bitcoin's incentive mechanism functions similarly to a fundraiser or a recruitment drive; the more participation, the more an attacker would have to pay to defeat it. This approach to security could be described as safety in numbers. However an implication is that for Bitcoin to be secure, it must stay on top, and attract the greatest amount of participation. \footnote{For example, in 2012 a Bitcoin mining pool attacked a small alt-coin, CoiledCoin. A minor participant on the larger Bitcoin network could easily join a smaller network and overwhelm it. \url{https://bitcointalk.org/index.php?topic=56675.msg678006#msg678006}} 
+
+\subsubsection{Design Tradeoffs}
+The need to compete with other similar cryptocurrencies establishes the essential tension underlying design decisions and tradeoffs. Bitcoin must encourage as much mining participation as possible in order to defend against powerful attackers. The main mechanism for encouraging miner participation is disbursing rewards denominated in Bitcoins, the internal unit of currency. Thus it is essential for that the application service provided by Bitcoin is useful enough that users are willing to pay usage fees and purchase currency from the miner. If an alternate cryptocurrency offers more features and appeals to more users, then it may compete with Bitcoin for miner participation, thus weakening its security. Because of this, Bitcoin may be expected to incorporating new features and functionalities if they appear to have sufficient user demand.
+
+On the other hand, new features and functionality typically involve increased cost (in either, communication, storage, or computation) to participants running ``fully-validating'' nodes, which is a requirement for correct mining. It is unclear how much additional burden can be shouldered by the network without a loss of security.
+
+A straightforward approach to reducing the costs of additional functionality is to delegate control to a trusted third party. This is axiomatically discouraged in the design goals of Bitcoin, as it constitutes an ``existential threat'' that increases the risk of an overall system failure, despite immediate benefits to efficiency and convenience.
  
 Proposed Bitcoin extensions can be categorized according to what resources they strain:
 \begin{itemize}
@@ -53,12 +67,13 @@ Proposed Bitcoin extensions can be categorized according to what resources they 
 \item Cost (time/space) required to verify
 \end{itemize}
 
-Major ideas are the following:
+Major themes are the following:
 \begin{itemize}
 \item Relying on Bitcoin as an ordered logfile: auxiliary protocols derived from information in the blockchain. Examples: smartcoin, killerstorm's implementation of colored coins, MasterCoin.
+\item 
 \item Relying on Bitcoin only for timestamping: CommitCoin
 \item Extending the amount of information that Bitcoin stores in the indexes and in the history log. E.g., ZeroCoin, Flip-the-chain
-\item ...
+\item SCrypt litecoin
 \end{itemize}
 
 
@@ -72,8 +87,8 @@ Major ideas are the following:
 
 
 \begin{table}
-\begin{tabular}
-CommitCoin
-ColoredCoins
+\begin{tabular}{c}
+CommitCoin \\
+ColoredCoins \\
 \end{tabular}
 \end{table}
