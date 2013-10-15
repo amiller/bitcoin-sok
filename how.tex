@@ -1,1 +1,30 @@
 \section{An Introduction to Bitcoin}
+
+Bitcoin's underlying mechanism.
+
+Mining, transaction propagation.
+
+Introduction of currency. Use of exchanges, market places.
+
+\subsection{Bitcoin as an Abstract Platform}
+
+What functionality does Bitcoin provide in the abstract? Originally presented as a mechanism for online ``payments,'' in the abstract it is a much more versatile platform.
+
+The following is an abstract description of Bitcoin's goals, independent of system assumptions or implementation:
+\begin{itemize}
+\item (Append-only Log with Stabilizing-Consistency) The network eventually stabilizes to a single global view of a linear ordering of transactions. Unlike standard consistency, there is not necessarily a final time at which it's guaranteed to be settled. The more time passes, the more likely that a current view is settled. Given a model of attacker strength, and security probability, one can calculate an amount of time to wait before considering a prefix to be authoritative.
+\item (Validation) Only valid transactions are committed to the log, where 'validity' is a function of the prior history of transactions.
+\item (Fairness) After expending sufficient resources (i.e., by paying a fee), any transaction is eventually committed to the log.
+\end{itemize}
+
+Stabilizing consistency is weaker than a typical distributed system. In a typical distributed system, you receive an acknowledgment at some finite time that the transaction has been committed. In Bitcoin, there is no such acknowledgment, and users must user their own discretion about how long to wait to consider a transaction committed.
+
+A typical definition of fairness or liveness would specify that *any* transaction should eventually accepted, without reference to adequate payment. However, since Bitcoin operates in a model with no established identities, this would be impossible due to the ability for an attacker to create sybil identities and flood the system.
+
+The view of Bitcoin as a platform is that the currency is only inherently useful to the extent that it allows you to pay for transaction fees. In this sense it is comparable to postage stamps.
+
+\subsection{Bitcoin's Model Assumptions}
+
+Bitcoin's assumptions are weaker than in a standard distributed system - most notably, there are no pre-established identities. On the other hand, the assumptions are about the rational preferences of population - specifically that they respond to incentives, even when the incentives are inconclusive. Seems to be circular?
+
+
