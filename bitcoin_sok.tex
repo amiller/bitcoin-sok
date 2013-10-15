@@ -1,4 +1,4 @@
-\documentclass[compsoc,conference]{IEEEtran}
+\documentclass[conference]{IEEEtran}
 % Add the compsoc option for Computer Society conferences.
 
 \usepackage{cite}
@@ -7,11 +7,15 @@
 %\usepackage[cmex10]{amsmath}
 %\usepackage{algorithmic}
 %\usepackage{array}
-\usepackage{url}
 
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
 
+\usepackage{color}
+\newcommand{\anote}[1]{{\color{magenta}[AM: #1]}}
+
+%\usepackage{url}
+\usepackage{hyperref}
 
 \begin{document}
 %
@@ -70,6 +74,7 @@
 \input{how}
 \input{breaks}
 \input{extensions}
+\input{discussion}
 \input{conclusion}
 
 % use section* for acknowledgement

@@ -1,5 +1,166 @@
-\section{Extensions}
+\section{ Proposed Extensions and Improvements to Bitcoin}
 
-\cite{jgarzik-smartcoin}
+Since Bitcoin's inception, a vibrant community of participants and open source developers, as well as a number of researchers, have suggested improvements and extensions. We have developed a framework to aggregate and systematically evaluate these contributions.
+
+\subsection{ Methodology: Technical Discussion from the Bitcoin Community}
+Technical discussions and formal presentation of Bitcoin extension ideas are primarily conducted through the following venues:
+\begin{itemize}
+\item Bitcointalk forums (\url{https://bitcointalk.org/})
+\item IRC Channels (\url{irc://freenode.net/#bitcoin-dev})
+\item Developer mailing list hosted on sourceforge
+\item Bitcoin wiki
+\item Bitcoin Improvement Proposals
+\end{itemize}
+\anote{Numbers for all of these?}
+Our methodology involves collecting ideas from these and analyzing them.
+
+As a resource to researchers, the discussions and ideas discussed in these venues represent a) what is desired about Bitcoin from its participants, b) what concerns or as of yet unexplained, c) what is thought to be possible or difficult, tradeoffs, which provide starting points for other research, and d) what facilitates actual deployment.
+
+\subsection{Categorization of Extensions}
+
+Suggested improvements to Bitcoin generally fall into the following categories:
+\begin{itemize}
+\item Efficiency improvements
+\item Increased stability and security (against various threats to the overall network, or economic stability)
+\item Additional functionality, to allow new uses
+\end{itemize}
+
+We prefer to distinguish between security as it concerns the health/stability of network system overall (e.g., as concerns Proof-of-Stake, Block times) and security of users (e.g., ZeroCoin, better keys or password protection).
+
+It's worth identifying that there are many roles in Bitcoin.
+\begin{itemize}
+\item Transactions and relaying
+\item Mining, including mining pools
+\item Exchanging, mixing, mirroring, merchants, and other services
+\end{itemize}
+A desirable feature may impact some roles but not others. For example, transaction privacy (e.g., Zerocoin) increases the security users but has no direct impact on miners. Likewise, additional costs to miners (or validating nodes) do not necessarily impact users directly.
+
+Due to the need for governance, everyone to agree on the constitutional rules, there are several routes to deploying improvements to Bitcoin. Most proposed extensions to Bitcoin are essentially independent of the mechanism by which they could be integrated. For example, although Zerocoin is proposed as an extension to Bitcoin, it could also be implemented as a concurrent and independent protocol (an ``altcoin''), or as a third party service that Bitcoin users interact with. Other arrangements are possible as well, such as implementing a proposal as an overlay on top of Bitcoin. Another approach, considered a ``gradual soft fork'' involves having the protocol be voluntarily included by miners. If the network of miners appear to reach a de facto consensus on a new extension, it would be easier politically to incorporate this in the mandatory rules. The following are ways in which an extension may be deployed:
+
+\begin{itemize}
+\item Hard-forking ``mandatory'' change, blocks without the modification will be rejected
+\item Soft-forking changes, for subsets of existing possibility, miners can include cooperating data backward-compatibly with blocks.
+\item Peer-to-peer network changes.
+\item Optional client changes only, compatible with existing p2p network.
+\item An external ``oracle,'' implemented as a trusted third party (or shared/quorum of third parties) recognizable by their public key signatures
+\item An altcoin, a separate concurrent protocol
+\end{itemize}
+
+This imposes a hierarchy of extensions. In our terminology, an extension to Bitcoin may require only modifications to the client - anything that modifies how a user interacts with Bitcoin can count as a modification. We do mean to rule out things like ATMs that interact with the ordinary Bitcoin client. Bitcoin, even its current form, supports a number of extensible uses. Enables protocols between individuals, use Bitcoin in some way.
+
+On one hand, the reference client accounts for the largest number of Bitcoin nodes. However as many users turn to hosted bitcoin wallets, it is hard to assign an actual user number to these.
+
+\subsubsection{Design Tradeoffs}
+The need to compete with other similar cryptocurrencies establishes the essential tension underlying design decisions and tradeoffs. Bitcoin must encourage as much mining participation as possible in order to defend against powerful attackers. The main mechanism for encouraging miner participation is disbursing rewards denominated in Bitcoins, the internal unit of currency. Thus it is essential for that the application service provided by Bitcoin is useful enough that users are willing to pay usage fees and purchase currency from the miner. If an alternate cryptocurrency offers more features and appeals to more users, then it may compete with Bitcoin for miner participation, thus weakening its security. Because of this, Bitcoin may be expected to incorporating new features and functionalities if they appear to have sufficient user demand.
+
+On the other hand, new features and functionality typically involve increased cost (in either, communication, storage, or computation) to participants running ``fully-validating'' nodes, which is a requirement for correct mining. It is unclear how much additional burden can be shouldered by the network without a loss of security.
+
+A straightforward approach to reducing the costs of additional functionality is to delegate control to a trusted third party. This is axiomatically discouraged in the design goals of Bitcoin, as it constitutes an ``existential threat'' that increases the risk of an overall system failure, despite immediate benefits to efficiency and convenience.
+ 
+Proposed Bitcoin extensions can be categorized according to what resources they strain:
+\begin{itemize}
+\item Size of blockchain, communication cost per block or per transaction
+\item Cost (time/space) of verifying blocks or transactions de-novo (prepare witness)
+\item Cost (time/space) required to verify
+\end{itemize}
+
+Major themes are the following:
+\begin{itemize}
+\item Relying on Bitcoin as an ordered logfile: auxiliary protocols derived from information in the blockchain. Examples: smartcoin, killerstorm's implementation of colored coins, MasterCoin.
+\item Relying on Bitcoin only for timestamping: CommitCoin
+\item Extending the amount of information that Bitcoin stores in the indexes and in the history log. E.g., ZeroCoin, Flip-the-chain
+\item SCrypt litecoin
+\end{itemize}
+
+
+
 \cite{miller2001capability}
-\cite{szabo1997formalizing,bitcointalk-bondmarkets,wiki-distributedmarkets}
+\cite{szabo1997formalizing,bitcointalk-bondmarkets}
+
+\subsection{Protocols Using Bitcoin as a Platform}
+
+\subsubsection{Standard Financial Transactions}
+Standard Financial Transactions involve the transfer or exchange of Bitcoin as money.
+\begin{itemize}
+\item (Purchase, SPV) In a standard Bitcoin transaction, a Buyer transfers a quantity of BTC to a Seller by publishing a transaction referring to a coin currently owned by the Buyer, and rededicating it to a public key owned by the Seller. The Seller waits for some number of confirmations, until he is confident that the block containing the transaction will not be revised, and then performs an irrevocable action, such as shipping an item to the Buyer. To check that the transaction is valid before including it in a block, a miner checks one public key signature, and queries the index of unspent coins, which takes $O(log m)$ time overall, where $m$ is the size of the index. The Seller does not need to fetch the entire contents of each block - it is sufficient only to check just the proof-of-work, since it is assumed that the hashpower of the honest participants on the network is steady, and only mine valid blocks - this is an example of SPV security. Note that the Buyer must trust the Seller to fulfill his end of the arrangement.
+
+\item (Escrow Purchase) If the Buyer does not wish to trust the Seller, but both parties can agree to trust a willing third party, then the third party can act as an Escrow agent. The Buyer constructs a transaction that allows the Escrow agent to choose whether to direct the funds to the Seller, or to the Buyer as a refund. The key idea is that the Escrow can only take these two options, and cannot take the funds for himself. Therefore the Escrow need not be fully trusted, but only must be trusted not to collude with either party. This model of Escrow is used by the BitMit auction site, as well as the former black market site SilkRoad. The threat of damaged reputation may keep the Escrow honest. On the other hand, if there is a dispute, where both parties accuse the other of lying, the Escrow may essentially have no way to determine which is at fault.
+
+\item (Time-locked Refund) The Escrow may abort and not sign any message, which would result in the funds being frozen indefinitely. Bitcoin supports a timelock mechanism, that allows a refund transaction to be prepared in case of the escrow agent timing out.
+\item (Green Address) If payment is received from a trusted party, then it may not be necessary to wait for confirmations. A Green Address refers to a publicly known address associated with a reputable entity, such as a hosted account provider (i.e., a bank). This is analogous to a cashier's check. If a double spend occurs, it would be easy to publish evidence of such, tarnishing the entity's reputation. MtGox has provided the option of withdrawing payments via a well-known Green address.
+
+\item (Quick Purchase) Bitcoin vending machine ~\cite{bitcoinsnack} Also several companies are currently deploying machines exchanging Bitcoin for other currencies, in particular Lamassu and BitcoinATM. The challenge is in accepting the coins in a short period of time. The approach is to connect to a large number of nodes and attempt to detect double spends, in which case can enter a panic mode.
+
+\item (Pay-to-Script-Hash) In the case of an escrow transaction, for example, the sender must create a transaction that includes the hashes of several public keys. The sender may have to pay a fee proportional to the size of the transaction. As a minor optimization, the sender can construct a transaction that includes just the hash of a larger script containing these public keys, and the full script must be provided by the receiver. This allows the sender to pay less in fees - the recipient may pay fewer fees overall to make the next transaction, if it is not time critical.
+\item (Micropayments) Suppose a Client wants to have a per-minute subscription for some service provided by a Server, and to decide whether to continue at each minute. Publishing a new transaction each minute would require a lot of transaction fees and storage on the network. Instead, the client creates a transaction that ``bails in'' the maximum amount of money for the day, along with a refund transaction that times out at the end of the day. After each minute, if the client wishes to continue, he transmits a new transaction to the server that increases the amount. When the server is ready to claim the transaction, he signs the largest transaction and publishes it. Only one transaction ever needs to be published, yet the Server is never able to take more than the Client offered.
+\item (Balance query, auth index) So far, every transaction has involved only point-wise queries to the index. An example of a more complicated query would be to compute the total balance of an address, meaning the sum of all coins associated with a particular public key. This could be done using a linear scan of the unspent transaction outputs index, but this would be inefficient. Instead, a second index could be sorted according to public key (at least for standard transaction types). This would increase the storage cost to a validator by a constant factor. In any case, the user performing the query would be required to store the entire index as well. Alternately, suppose that the unspent transaction index is committed to as an authenticated data structure, the root of a merkle hash tree. Then the user can confirm the balance using only a $O(log m)$ size transmission from an {\em untrusted} node.
+\end{itemize}
+
+\subsubsection{Overlay Currencies}
+Besides using Bitcoin as money, Bitcoin as a platform can also be used to maintain alternate currencies, such as personally-issued IOU coins, transferable shares in a Business, etc.
+\begin{itemize}
+\item (Colored~\cite{coloredcoins,bitcointalk-coloredcoins} and SmartCoins~\cite{jgarzik-smartcoin}) Colored coins have been one of the most anticipated protocols built on top of Bitcoin. A colored coin is introduced by fiat - an issuer, such as the executive of a corporation, declares that a particular transaction output (containing $N$ currency units) is the genesis of a new color of bond, and that each portion of the coin corresponds to a portion of the bond. The issuer can transfer a portion of the bond to another user, using the ordinary transfer mechanism. In order to allow the bond to be further subdivided (or merged), rules are imposed that give users ability to trace the color through every possible transaction in such a way that a) the user is always able to construct a transaction that preserves the color, and b) the user cannot increase the amount of colored coins he has. Since ordinary miners do not perform any sort of validation specific to the colored coin, there is no notion of SPV security - in order to accept a colored coin as payment and validate that a transaction contains a valid colored coin, the acceptor must maintain an entire colored coin index, which is a constant factor larger than an ordinary index. This scheme benefits from the use of Bitcoin as an append-only log, but does not benefit from the presence of validation rules.
+\item (MasterCoin~\cite{mastercoin}) Similar to colored coins, MasterCoin proposes to create overlay currencies using Bitcoin as an append only log, but without validation rules. Whereas Colored Coins use existing Bitcoins as carriers of currency quantities, MasterCoin proposes to place arbitrary data packets with in Bitcoin transactions, of which only the first valid subsequence is considered authoritative. The index required to participate in MasterCoin is potentially unbounded with respect to the size of the ordinary Bitcoin index.
+\item (Freimarkets~\cite{freimarkets} and Ripple) Whereas Colored Coins and Master Coin involve the creation of overlay currencies without validation, Ripple proposes to build the rules governing such overlay currencies directly into the validation rules. This increases the cost of validation, however it restores the ability to use SPV security, where users do not need to store the entire index. Note that Ripple also proposes a different consensus model based on designated trusted entities rather than incentivized proof-of-work.
+%\item (OpenTransactions) A simpler approach to overlay currencies is to maintain the overlay currencies using a separate third-party server. Arguably such a scheme has little to do with Bitcoin, except that the alternate currencies can be exchanged.
+\end{itemize}
+
+\subsubsection{Timestamped Publishing}
+One non-financial use of Bitcoin is as a document timestamping system. There are several ways of doing this that have varying tradeoffs.
+\begin{itemize}
+\item (CommitCoin) In CommitCoin, the hash of a document is embedded in the public key of a transaction that is published and timestamped in the blockchain. The user must store the document herself, and at any later time can publish the document and prove to anyone else that the hash of the document was known previously to the timestamped date.
+\item (ChronoBit) ChronoBit is similar to CommitCoin, except that the client delegates storing the document itself to a third party service. The third party service must be relied on for liveness - if it loses the document, the client will not be able to prove anything. Instead of embedding the hash in a transaction, it is included in the special coinbase transaction created mining a block.
+\item (OP\_DROP) Rather than publishing the hash of a document, it would be possible to publish the entire document itself in a transaction. A special opcode, OP\_DROP, was proposed to allow inclusion of arbitrary data in a transaction in such a way that it can be immediately pruned. At this time, it has not been included.
+\item (Tribute to Len) An alternate approach is to encode a document directly into the bytes that normally contain public key. This requires burning money - the Bitcoins associated with the non-public-key can never be reclaimed. The document also cannot be pruned, and will be fully replicated forever on every client.
+\end{itemize}
+
+\subsubsection{Private Transactions}
+Standard Bitcoin transactions are published in the clear, although account numbers are typically not associated with any real world identity. Publishing transactions makes it easy to verify that system invariants are maintained, for example that the total amount of currency is conserved. However, many users would prefer their financial transactions to be kept private. There are several approaches to obscuring relations between keys, essentially by performing a mix of some kind.
+
+\begin{itemize}
+\item (Mixers) The simplest (and most common) approach is for parties to transfer equal amounts of coins to a trusted third party mixer, who shuffles the coins, returns them to their owners, and deletes its log. Using Chaumian blinded signatures, users may not need to trust the mixer to delete logs, although they will still need to trust the mixer not to abscond with their funds. Using zero knowledge techniques, the operation of a third party mixer can be made publicly verifiable, which further reduces the likelihood of the mix stealing funds without getting caught.
+\item (CoinJoin) A shuffle of $n$ transaction inputs and $n$ transaction outputs can be conducted atomically using a single transaction. However, this requires several rounds after which each party signs the entire transaction. Notably, it is easy for an attacker to prevent the mix from completing.
+\item (Aggregate-Signature CoinJoin) Using aggregate signatures, the transaction can be signed incrementally, reducing the amount of interaction needed to perform an atomic mix.
+\item (ZeroCoin)~\cite{miers2013zerocoin} Perhaps the most thorough solution is to embed the functionality of a publicly verifiable (and public coin) third party mix directly into the validation rules of the block chain. This incurs additional validation cost.
+\end{itemize}
+
+\subsubsection{DNS / Certificate List}
+\begin{itemize}
+\item (Bitcoin-OTC) As mentioned before, despite the lack of trusted entities required for money transfers in Bitcoin, even a simple purchase requires some degree of trust between a Buyer and a Seller. Reputation aggregation systems, similar to the ones provided by eBay and Amazon, can be used to motivate honesty and discourage damaging a reputation. A popular reputation aggregation system for the Bitcoin community is run as a third party service. Conceptually a similar system could be modified to run within the Bitcoin system itself.
+\item (NameCoin) An altcoin has been proposed to serve the functionality of the current Domain Name System. The validation rules are augmented to include updates of domain name records. Unused domain names cost a minimal fee to register initially, but the owner of a domain name can sell it (atomically) for an arbitrary price. Periodic renewal fees discourage squatting of domain names.
+\item (Fidelity Bond) A general approach to meaningful identities in an otherwise anonymous environment is to require something of value invested in each identity. By burning or encumbering a quantity of money associated with a particular name, a party can signal that they value the reputation associated with this identity.
+\item (Anonymous Credentials)
+\end{itemize}
+
+\subsubsection{Other}
+
+\begin{itemize}
+\item (Coin Flip) Satoshi-dice
+\item (Transaction Puzzle) A special instance of a transaction puzzle could be a Vanity Address.
+\item (Smart Contracts)
+\end{itemize}
+
+\subsubsection{Multi-Chain Transactions}
+Bitcoin is not the sole cryptocurrency, instead it must be understood as the currently-dominant member of a potentially unbounded ecosystem of possibly competing or cooperating crypto-currencies. The simplest interaction between two related currencies is akin to a foreign currency exchange.
+
+\begin{itemize}
+\item (TierNolan's Protocol~\cite{tiernolan}) There exists a three phase process by which two currencies can be atomically exchanged
+\item (P2PTradeX~\cite{p2ptradex}) Another proposal involves having one currency validate blocks in the other. This potentially allows for more complicated interactions, as validators of one currency essentially enjoy a reduced-cost SPV view of the other chain, and vice versa. (example needed)
+\end{itemize}
+
+\subsection{Proposed Modifications}
+
+Many proposed modifications to Bitcoin are meaningful independent of any particular protocol. Generally these improve security, decrease the cost of participation, or increase the speed at which transactions can be included. Often there is a tradeoff, for example increased security at the cost of. Many involve changing parameters which are configured in Bitcoin without any particular justification. 
+
+\begin{itemize}
+\end{itemize}
+
+
+
+
+\begin{table}
+\begin{tabular}{c}
+CommitCoin \\
+ColoredCoins \\
+\end{tabular}
+\end{table}
