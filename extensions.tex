@@ -84,10 +84,10 @@ Standard Financial Transactions involve the transfer or exchange of Bitcoin as m
 \begin{itemize}
 \item (Purchase, SPV) In a standard Bitcoin transaction, a Buyer transfers a quantity of BTC to a Seller by publishing a transaction referring to a coin currently owned by the Buyer, and rededicating it to a public key owned by the Seller. The Seller waits for some number of confirmations, until he is confident that the block containing the transaction will not be revised, and then performs an irrevocable action, such as shipping an item to the Buyer. To check that the transaction is valid before including it in a block, a miner checks one public key signature, and queries the index of unspent coins, which takes $O(log m)$ time overall, where $m$ is the size of the index. The Seller does not need to fetch the entire contents of each block - it is sufficient only to check just the proof-of-work, since it is assumed that the hashpower of the honest participants on the network is steady, and only mine valid blocks - this is an example of SPV security. Note that the Buyer must trust the Seller to fulfill his end of the arrangement.
 
-\item (Escrow Purchase) If the Buyer does not wish to trust the Seller, but both parties can agree to trust a willing third party, then the third party can act as an Escrow agent. The Buyer constructs a transaction that allows the Escrow agent to choose whether to direct the funds to the Seller, or to the Buyer as a refund. The key idea is that the Escrow can only take these two options, and cannot take the funds for himself. Therefore the Escrow need not be fully trusted, but only must be trusted not to collude with either party. This model of Escrow is used by the BitMit auction site, as well as the former black market site SilkRoad. The threat of damaged reputation may keep the Escrow honest. On the other hand, if there is a dispute, where both parties accuse the other of lying, the Escrow may essentially have no way to determine which is at fault.
+\item (Escrow Purchase) If the Buyer does not wish to trust the Seller, but both parties can agree to trust a willing third party, then the third party can act as an Escrow agent. The Buyer constructs a transaction that allows the Escrow agent to choose whether to direct the funds to the Seller, or to the Buyer as a refund. The key idea is that the Escrow can only take these two options, and cannot take the funds for himself. Therefore the Escrow need not be fully trusted, but only must be trusted not to collude with either party. This model of Escrow is used by the BitMit auction site, as well as the former black market site SilkRoad. Independent Escrow provided by a company called ``BTCrow.'' The threat of damaged reputation may keep the Escrow honest. On the other hand, if there is a dispute, where both parties accuse the other of lying, the Escrow may essentially have no way to determine which is at fault.
 
 \item (Time-locked Refund) The Escrow may abort and not sign any message, which would result in the funds being frozen indefinitely. Bitcoin supports a timelock mechanism, that allows a refund transaction to be prepared in case of the escrow agent timing out.
-\item (Green Address) If payment is received from a trusted party, then it may not be necessary to wait for confirmations. A Green Address refers to a publicly known address associated with a reputable entity, such as a hosted account provider (i.e., a bank). This is analogous to a cashier's check. If a double spend occurs, it would be easy to publish evidence of such, tarnishing the entity's reputation. MtGox has provided the option of withdrawing payments via a well-known Green address.
+\item (Green Address~\cite{greenaddress}) If payment is received from a trusted party, then it may not be necessary to wait for confirmations. A Green Address refers to a publicly known address associated with a reputable entity, such as a hosted account provider (i.e., a bank). This is analogous to a cashier's check. If a double spend occurs, it would be easy to publish evidence of such, tarnishing the entity's reputation. MtGox has provided the option of withdrawing payments via a well-known Green address.
 
 \item (Quick Purchase) Bitcoin vending machine ~\cite{bitcoinsnack} Also several companies are currently deploying machines exchanging Bitcoin for other currencies, in particular Lamassu and BitcoinATM. The challenge is in accepting the coins in a short period of time. The approach is to connect to a large number of nodes and attempt to detect double spends, in which case can enter a panic mode.
 
@@ -127,7 +127,7 @@ Standard Bitcoin transactions are published in the clear, although account numbe
 \subsubsection{DNS / Certificate List}
 \begin{itemize}
 \item (Bitcoin-OTC) As mentioned before, despite the lack of trusted entities required for money transfers in Bitcoin, even a simple purchase requires some degree of trust between a Buyer and a Seller. Reputation aggregation systems, similar to the ones provided by eBay and Amazon, can be used to motivate honesty and discourage damaging a reputation. A popular reputation aggregation system for the Bitcoin community is run as a third party service. Conceptually a similar system could be modified to run within the Bitcoin system itself.
-\item (NameCoin) An altcoin has been proposed to serve the functionality of the current Domain Name System. The validation rules are augmented to include updates of domain name records. Unused domain names cost a minimal fee to register initially, but the owner of a domain name can sell it (atomically) for an arbitrary price. Periodic renewal fees discourage squatting of domain names.
+\item (Namecoin) An altcoin has been proposed to serve the functionality of the current Domain Name System. The validation rules are augmented to include updates of domain name records. Unused domain names cost a minimal fee to register initially, but the owner of a domain name can sell it (atomically) for an arbitrary price. Periodic renewal fees discourage squatting of domain names.
 \item (Fidelity Bond) A general approach to meaningful identities in an otherwise anonymous environment is to require something of value invested in each identity. By burning or encumbering a quantity of money associated with a particular name, a party can signal that they value the reputation associated with this identity.
 \item (Anonymous Credentials)
 \end{itemize}
@@ -152,10 +152,42 @@ Bitcoin is not the sole cryptocurrency, instead it must be understood as the cur
 
 Many proposed modifications to Bitcoin are meaningful independent of any particular protocol. Generally these improve security, decrease the cost of participation, or increase the speed at which transactions can be included. Often there is a tradeoff, for example increased security at the cost of. Many involve changing parameters which are configured in Bitcoin without any particular justification. 
 
+\subsubsection{Parameter changes}
 \begin{itemize}
+\item (Faster block time) Examples: litecoin
+\item (Increased block size limit)
+\item (Inflation monetary policy)
+\item (Alternate Hash-based proof of work)
+\item (Dust discouraging)
 \end{itemize}
 
+\subsubsection{Substantial or Economic Changes}
+\begin{itemize}
+\item (Proof of stake) Alternate security model. Perceived possibility of an economic attack. 
+\item (Designated authorities) Either. Another point out is Ripple's approach to unique node lists. We do not understand the model under which these are secure. On the other hand, we don't yet have a clear model in which Bitcoin's incentives work either. 
+\item (Useful proof of work) Bitcoin appears to be wasteful. There are two ways in which it is wasteful - one is that the energy burned is not directly useful. A common suggestion is to replace the proof of work with a search function, such that a solution would be useful, distributed search project. It has been argued (e.g., by Kroll et al) that this must be a pure public good, or else it subsidizes an attacker. Another form of waste is that the investment in more efficient mining devices has led to the development and distribution of devices that are useful for computing SHA2 and nothing else. In concurrent work we investigate the potential to replace the puzzle with a ``storage hard'' puzzle, so that mining equipment is copies of a dataset.
+\item (Demurrage or rental fee) The fees are claimed by miners, which gives them incentive to include them. On the other hand, the cost of introducing a transaction is shared by other miners, who store copies of the replicated index, and who validate new transactions.
+\end{itemize}
 
+\subsubsection{Efficiency}
+\begin{itemize}
+\item (Pruneable Indexes) ultraprune
+\item (Authenticated Indexes) Also known as Flip-the-chain, or UTXO compression.
+\item (Child pays for fees)
+\item (Headers only download) For SPV security, but also helpful for clients that will gradually download the chain.
+\item (Verifiable Computing validation) SNARKs, Pinocchio or TinyRAM.
+\end{itemize}
+
+\subsubsection{Security}
+Primarily based on how users store private keys necessary to authorize transactions. Mostly changes to an individual client, rather than network level changes.
+\begin{itemize}
+\item (Hierarchical Deterministic Wallet)
+\item (Encrypted Wallet)
+\item (Paper wallet)
+\item (Brain wallet)
+\item (Hardware wallet)
+\item (Compressed Work Sample) potentially more efficient than SCIP.
+\end{itemize}
 
 
 \begin{table}
