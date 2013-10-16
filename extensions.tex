@@ -1,8 +1,12 @@
-\section{ Proposed Extensions and Improvements to Bitcoin}
+\section{ Evaluation of Crypto-currency design space }
 
-Since Bitcoin's inception, a vibrant community of participants and open source developers, as well as a number of researchers, have suggested improvements and extensions. We have developed a framework to aggregate and systematically evaluate these contributions.
+Since Bitcoin's inception, a vibrant community of participants and open source developers, as well as a number of researchers, have suggested improvements and extensions. We have developed a framework to aggregate and systematically evaluate these contributions. 
 
-\subsection{ Methodology: Technical Discussion from the Bitcoin Community}
+Two main categorizations stand out: a) there are proposals for protocols that use Bitcoin (or a variant) as a platform, and b) there are proposals for modifications to the platform itself. We treat these separately.
+
+
+
+\subsection{ Source Collection: Technical Discussions from the Bitcoin Community}
 Technical discussions and formal presentation of Bitcoin extension ideas are primarily conducted through the following venues:
 \begin{itemize}
 \item Bitcointalk forums (\url{https://bitcointalk.org/})
@@ -17,6 +21,13 @@ Our methodology involves collecting ideas from these and analyzing them.
 As a resource to researchers, the discussions and ideas discussed in these venues represent a) what is desired about Bitcoin from its participants, b) what concerns or as of yet unexplained, c) what is thought to be possible or difficult, tradeoffs, which provide starting points for other research, and d) what facilitates actual deployment.
 
 \subsection{Categorization of Extensions}
+
+\subsubsection{Design Tradeoffs}
+The need to compete with other similar cryptocurrencies establishes the essential tension underlying design decisions and tradeoffs. Bitcoin must encourage as much mining participation as possible in order to defend against powerful attackers. The main mechanism for encouraging miner participation is disbursing rewards denominated in Bitcoins, the internal unit of currency. Thus it is essential for that the application service provided by Bitcoin is useful enough that users are willing to pay usage fees and purchase currency from the miner. If an alternate cryptocurrency offers more features and appeals to more users, then it may compete with Bitcoin for miner participation, thus weakening its security. Because of this, Bitcoin may be expected to incorporating new features and functionalities if they appear to have sufficient user demand.
+
+On the other hand, new features and functionality typically involve increased cost (in either, communication, storage, or computation) to participants running ``fully-validating'' nodes, which is a requirement for correct mining. It is unclear how much additional burden can be shouldered by the network without a loss of security.
+
+A straightforward approach to reducing the costs of additional functionality is to delegate control to a trusted third party. This is axiomatically discouraged in the design goals of Bitcoin, as it constitutes an ``existential threat'' that increases the risk of an overall system failure, despite immediate benefits to efficiency and convenience.
 
 Suggested improvements to Bitcoin generally fall into the following categories:
 \begin{itemize}
@@ -46,38 +57,32 @@ Due to the need for governance, everyone to agree on the constitutional rules, t
 \item An altcoin, a separate concurrent protocol
 \end{itemize}
 
+
 This imposes a hierarchy of extensions. In our terminology, an extension to Bitcoin may require only modifications to the client - anything that modifies how a user interacts with Bitcoin can count as a modification. We do mean to rule out things like ATMs that interact with the ordinary Bitcoin client. Bitcoin, even its current form, supports a number of extensible uses. Enables protocols between individuals, use Bitcoin in some way.
 
 On one hand, the reference client accounts for the largest number of Bitcoin nodes. However as many users turn to hosted bitcoin wallets, it is hard to assign an actual user number to these.
 
-\subsubsection{Design Tradeoffs}
-The need to compete with other similar cryptocurrencies establishes the essential tension underlying design decisions and tradeoffs. Bitcoin must encourage as much mining participation as possible in order to defend against powerful attackers. The main mechanism for encouraging miner participation is disbursing rewards denominated in Bitcoins, the internal unit of currency. Thus it is essential for that the application service provided by Bitcoin is useful enough that users are willing to pay usage fees and purchase currency from the miner. If an alternate cryptocurrency offers more features and appeals to more users, then it may compete with Bitcoin for miner participation, thus weakening its security. Because of this, Bitcoin may be expected to incorporating new features and functionalities if they appear to have sufficient user demand.
 
-On the other hand, new features and functionality typically involve increased cost (in either, communication, storage, or computation) to participants running ``fully-validating'' nodes, which is a requirement for correct mining. It is unclear how much additional burden can be shouldered by the network without a loss of security.
 
-A straightforward approach to reducing the costs of additional functionality is to delegate control to a trusted third party. This is axiomatically discouraged in the design goals of Bitcoin, as it constitutes an ``existential threat'' that increases the risk of an overall system failure, despite immediate benefits to efficiency and convenience.
- 
-Proposed Bitcoin extensions can be categorized according to what resources they strain:
+\section{ Protocols using Bitcoin as a Platform }
+
+The standard usage of Bitcoin is for financial transactions, in particular payments, denominated in the built-in currency. However there are a variety of more complicated financial transactions, including the construction of other currencies overlayed, as well as other uses, such as timestamping.
+
+These proposals can be compared and evaluated in several ways.
+
+A summary of this comparison, applied to the proposals we have collected, is provided in Table \ref{tbl:protocols}.
+
+\subsection{Descriptions of the Columns}
+Protocols using Bitcoin as a platform can be evaluated in the following ways:
 \begin{itemize}
-\item Size of blockchain, communication cost per block or per transaction
-\item Cost (time/space) of verifying blocks or transactions de-novo (prepare witness)
-\item Cost (time/space) required to verify
-\end{itemize}
-
-Major themes are the following:
-\begin{itemize}
-\item Relying on Bitcoin as an ordered logfile: auxiliary protocols derived from information in the blockchain. Examples: smartcoin, killerstorm's implementation of colored coins, MasterCoin.
-\item Relying on Bitcoin only for timestamping: CommitCoin
-\item Extending the amount of information that Bitcoin stores in the indexes and in the history log. E.g., ZeroCoin, Flip-the-chain
-\item SCrypt litecoin
+\item What computational resources they require from the platform. This primarily consists of a) the amount of communications for the necessary transactions, b) the amount of storage required in the replicated index, c) the cost of validating a transaction.
+\item The computational resources required of the protocol participants. This includes external storage, computation, and communication, as well as the amount of time and interaction required.
+\item Attack model and failure modes (e.g., sensitivity to race conditions). Is trust required between the participants?
+\item What modifications to the existing Bitcoin protocol (if any) are required.
 \end{itemize}
 
 
-
-\cite{miller2001capability}
-\cite{szabo1997formalizing,bitcointalk-bondmarkets}
-
-\subsection{Protocols Using Bitcoin as a Platform}
+\subsection{Descriptions of the Rows}
 
 \subsubsection{Standard Financial Transactions}
 Standard Financial Transactions involve the transfer or exchange of Bitcoin as money.
@@ -132,14 +137,6 @@ Standard Bitcoin transactions are published in the clear, although account numbe
 \item (Anonymous Credentials)
 \end{itemize}
 
-\subsubsection{Other}
-
-\begin{itemize}
-\item (Coin Flip) Satoshi-dice
-\item (Transaction Puzzle) A special instance of a transaction puzzle could be a Vanity Address.
-\item (Smart Contracts)
-\end{itemize}
-
 \subsubsection{Multi-Chain Transactions}
 Bitcoin is not the sole cryptocurrency, instead it must be understood as the currently-dominant member of a potentially unbounded ecosystem of possibly competing or cooperating crypto-currencies. The simplest interaction between two related currencies is akin to a foreign currency exchange.
 
@@ -148,9 +145,32 @@ Bitcoin is not the sole cryptocurrency, instead it must be understood as the cur
 \item (P2PTradeX~\cite{p2ptradex}) Another proposal involves having one currency validate blocks in the other. This potentially allows for more complicated interactions, as validators of one currency essentially enjoy a reduced-cost SPV view of the other chain, and vice versa. (example needed)
 \end{itemize}
 
-\subsection{Proposed Modifications}
+\subsubsection{Other}
 
-Many proposed modifications to Bitcoin are meaningful independent of any particular protocol. Generally these improve security, decrease the cost of participation, or increase the speed at which transactions can be included. Often there is a tradeoff, for example increased security at the cost of. Many involve changing parameters which are configured in Bitcoin without any particular justification. 
+\begin{itemize}
+\item (Coin Flip) Satoshi-dice
+\item (Transaction Puzzle) A special instance of a transaction puzzle could be a Vanity Address.
+\item (Smart Contracts)
+\end{itemize}
+
+
+
+\section{Proposed Extensions to the Platform}
+
+Many proposed modifications to Bitcoin are meaningful independent of any particular protocol. Generally these improve security, decrease the cost of participation, or increase the speed at which transactions can be included. Often there is a tradeoff, for example increased security at the cost of. Many involve changing parameters which are configured in Bitcoin without any particular justification.
+
+\subsection{Description of the Columns}
+Proposed modifications to the Bitcoin platform can be evaluated according to the following dimensions:
+\begin{itemize}
+\item (System security) Does it decrease the cost (storage, computation, communication) of transaction or block validation?
+\item (User Centric) For users of the system (participating in protocols involving transactions or queries to the system) does it increase their security? Reduce their cost of participation?
+\item (Economic Impact) Does it change the overall economic effect?
+\item Does it reflect a change or refinement of the participation or overall attack model?
+\item Does it require a change to the block validation rules (hard fork), or the transaction inclusion rules (soft fork), the peer-to-peer messaging protocol, or just the client?
+\item Maturity: is there an implementation available? Has it been implemented in an altcoin? Or has it been adopted as a patch to Bitcoin?
+\end{itemize}
+
+\subsection{Description of the Rows}
 
 \subsubsection{Parameter changes}
 \begin{itemize}
