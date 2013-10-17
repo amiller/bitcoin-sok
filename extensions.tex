@@ -81,7 +81,6 @@ Protocols using Bitcoin as a platform can be evaluated in the following ways:
 \item What modifications to the existing Bitcoin protocol (if any) are required.
 \end{itemize}
 
-
 \subsection{Descriptions of the Rows}
 
 \subsubsection{Standard Financial Transactions}
@@ -155,10 +154,10 @@ Bitcoin is not the sole cryptocurrency, instead it must be understood as the cur
 
 
 
-
 \section{Proposed Modifications to the Platform}
 
 Many proposed modifications to Bitcoin are meaningful independent of any particular protocol. Generally these improve security, decrease the cost of participation, or increase the speed at which transactions can be included. Often there is a tradeoff, for example increased security at the cost of. Many involve changing parameters which are configured in Bitcoin without any particular justification.
+
 
 \subsection{Description of the Columns}
 
@@ -166,11 +165,18 @@ Proposed modifications to the Bitcoin platform can be evaluated according to the
 
 \begin{itemize}
 \item (System efficiency) Does it decrease the cost (storage, computation, communication) of transaction or block validation?
-\item (User Centric) For users of the system (participating in protocols involving transactions or queries to the system) does it increase their security? Reduce their cost of participation?
-\item (Economic Impact) Does it change the overall economic effect?
-\item Does it reflect a change or refinement of the participation or overall attack model?
+\item (Economic structure) Besides efficiency, does it alter the reward for miners to participate?
+\item (User Centric) For users of the system (participating in protocols involving transactions or queries to the system) does it increase their security? Or reduce their cost of participation?
+\item (Security Model) Does it reflect a change or refinement of the participation or overall attack model?
 \item (Integration Requirement) Does it require a change to the block validation rules (hard fork), or the transaction inclusion rules (soft fork), the peer-to-peer messaging protocol, or just the client?
-\item (Maturity): is there an implementation available? Has it been implemented in an altcoin? Or has it been adopted as a patch to Bitcoin?
+  \begin{itemize}
+    \item (Hard-Fork) For new functionality that existing full-validating clients (whether or not they also mine) will reject. If miners switch to this, cause disagreement between full nodes and SPV nodes. Hard-fork requires every validating node to upgrade their clients immediately.
+    \item (Soft-Fork) Refinements of existing behavior, for example disabling an opcode, enforcing a subset of the transaction script language. A majority of mining participants can enforce a soft-fork by refusing to work on blocks violating the new rule.
+    \item (Miner Policy) Miners can choose not to include transactions into their own blocks, yet still accept blocks made by other miners. IsStandard and eligius. Transaction prioritization.
+    \item (P2P) Affects the messaging layer. How nodes find each other, announce, request, transfer data such as blocks and transactions. How to serve old blocks to new nodes on the network.
+    \item (Client) Only requires a change of the client.
+  \end{itemize}
+\item (Maturity): is there an implementation available? Has it been implemented in an altcoin? Or has it been adopted as a patch to Bitcoin? Any particular change can be made as an altcoin.
 \end{itemize}
 
 \subsection{Description of the Rows}
@@ -193,7 +199,7 @@ The outermost layer of the system.
 Not necessarily have to be linear to be useful, although some conflicts such as a double-spend require linearization.
 
 \subsubsection{Mining Behavior}
-Can always play dumb, pretend it didn't here. Easy to omit transactions and blocks.
+Miners can always play dumb, and pretend it didn't hear about a transaction, and there does not seem to be a way to enforce this. This includes soft-fork and policy changes.
 \begin{itemize}
 \item (Transaction Preference) Priority. Fees. Dust discouragement. Refusing to mine on non-standard transactions (policy change). Probabilistic transaction validation.
 \item (Block Preference) No standard client has proposed anything other than take the longest block, and most recent one found if there is a tie. Kroll et al. argue that taking the longest block is a focal point. Miners may decide to refuse mining on blocks containing transactions they don't like. If a miner deviates from the consensus here, then it will waste its mining power. If enough take it, then it is a ``soft-fork rule change,'' can be used to enforce a subset of the rules. For example, the Eligius mining pool mines nonstandard transactions.
