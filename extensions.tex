@@ -155,14 +155,19 @@ Bitcoin is not the sole cryptocurrency, instead it must be understood as the cur
 
 
 
-\section{Proposed Extensions to the Platform}
+
+\section{Proposed Modifications to the Platform}
 
 Many proposed modifications to Bitcoin are meaningful independent of any particular protocol. Generally these improve security, decrease the cost of participation, or increase the speed at which transactions can be included. Often there is a tradeoff, for example increased security at the cost of. Many involve changing parameters which are configured in Bitcoin without any particular justification.
 
 \subsection{Description of the Columns}
-Proposed modifications to the Bitcoin platform can be evaluated according to the following dimensions:
+
+Proposed modifications to the Bitcoin platform can be evaluated according to the following dimensions.
+
+Increasing the cost of transaction validation.
+
 \begin{itemize}
-\item (System security) Does it decrease the cost (storage, computation, communication) of transaction or block validation?
+\item (System efficiency) Does it decrease the cost (storage, computation, communication) of transaction or block validation?
 \item (User Centric) For users of the system (participating in protocols involving transactions or queries to the system) does it increase their security? Reduce their cost of participation?
 \item (Economic Impact) Does it change the overall economic effect?
 \item Does it reflect a change or refinement of the participation or overall attack model?
@@ -172,43 +177,52 @@ Proposed modifications to the Bitcoin platform can be evaluated according to the
 
 \subsection{Description of the Rows}
 
-\subsubsection{Parameter changes}
+\subsubsection{Hard-Fork Parameters}
+The outermost layer of the system.
 \begin{itemize}
-\item (Faster block time) Examples: litecoin
-\item (Increased block size limit)
-\item (Inflation monetary policy)
-\item (Alternate Hash-based proof of work)
-\item (Dust discouraging)
+\item (Difficulty adjustment) Time is a critical parameter. If this is set too low, then the network does not reach consensus, or the effective power of the network against an attacker is diminished. If it is set too high, then the variance for measuring the amount of security is lower. This is set by magic parameter. How else should it be set?
+\item (Proof-of-Work System) Alternate functions based on hash function. Useful proof-of-work. Proof-of-stake. Designated party LaurieCoin, Proof of Work. 
+  \begin{itemize}
+  \item (Proof of stake) Alternate security model. Perceived possibility of an economic attack. 
+  \item (Designated authorities) Either. Another point out is Ripple's approach to unique node lists. We do not understand the model under which these are secure. On the other hand, we don't yet have a clear model in which Bitcoin's incentives work either. 
+  \item (Useful proof of work) Bitcoin appears to be wasteful. There are two ways in which it is wasteful - one is that the energy burned is not directly useful. A common suggestion is to replace the proof of work with a search function, such that a solution would be useful, distributed search project. It has been argued (e.g., by Kroll et al) that this must be a pure public good, or else it subsidizes an attacker. Another form of waste is that the investment in more efficient mining devices has led to the development and distribution of devices that are useful for computing SHA2 and nothing else. In concurrent work we investigate the potential to replace the puzzle with a ``storage hard'' puzzle, so that mining equipment is copies of a dataset.
+    \end{itemize}
+\item (Block Size Limit) Remove it all together?
+\item (Monetary Policy) Bonus schedule. Demurrage. Coinbase maturity. Conservation invariant.
+\item (Transaction Scripts) New op codes, including ones disabled. Other signature schemes. Access to the index? Suspended computation. Ability to refer to other scripts. Turing complete? Succinct proofs with TinyRAM/Pinocchio? Access to additional indexes?
 \end{itemize}
 
-\subsubsection{Substantial or Economic Changes}
+Not necessarily have to be linear to be useful, although some conflicts such as a double-spend require linearization.
+
+\subsubsection{Mining Behavior}
+Can always play dumb, pretend it didn't here. Easy to omit transactions and blocks.
 \begin{itemize}
-\item (Proof of stake) Alternate security model. Perceived possibility of an economic attack. 
-\item (Designated authorities) Either. Another point out is Ripple's approach to unique node lists. We do not understand the model under which these are secure. On the other hand, we don't yet have a clear model in which Bitcoin's incentives work either. 
-\item (Useful proof of work) Bitcoin appears to be wasteful. There are two ways in which it is wasteful - one is that the energy burned is not directly useful. A common suggestion is to replace the proof of work with a search function, such that a solution would be useful, distributed search project. It has been argued (e.g., by Kroll et al) that this must be a pure public good, or else it subsidizes an attacker. Another form of waste is that the investment in more efficient mining devices has led to the development and distribution of devices that are useful for computing SHA2 and nothing else. In concurrent work we investigate the potential to replace the puzzle with a ``storage hard'' puzzle, so that mining equipment is copies of a dataset.
-\item (Demurrage or rental fee) The fees are claimed by miners, which gives them incentive to include them. On the other hand, the cost of introducing a transaction is shared by other miners, who store copies of the replicated index, and who validate new transactions.
+\item (Transaction Preference) Priority. Fees. Dust discouragement. Refusing to mine on non-standard transactions (policy change). Probabilistic transaction validation.
+\item (Block Preference) No standard client has proposed anything other than take the longest block, and most recent one found if there is a tie. Kroll et al. argue that taking the longest block is a focal point. Miners may decide to refuse mining on blocks containing transactions they don't like. If a miner deviates from the consensus here, then it will waste its mining power. If enough take it, then it is a ``soft-fork rule change,'' can be used to enforce a subset of the rules. For example, the Eligius mining pool mines nonstandard transactions.
+\item (Computationally Secure Verification) Commitment of index. Cryptographic improvements for validation. Efficiency Pinocchio or TinyRAM. Zero knowledge validation of commitments? ZeroCoin is a limited form of this. Compressed work sample.
+\item (Pool participation) Forms of rewards. P2Pool, pool hopping, reward schemes. Apparent desire for low variance.
 \end{itemize}
 
-\subsubsection{Efficiency}
+\subsubsection{P2P System}
+The system that passes around blocks and transactions. Primarily concerned with denial of service, while maintaining connectivity. Also concerned with privacy. Conceptually the entire P2P network could change, or a new P2P network could be developed, that interfaces with other Bitcoin nodes.
 \begin{itemize}
-\item (Pruneable Indexes) ultraprune
-\item (Authenticated Indexes) Also known as Flip-the-chain, or UTXO compression.
-\item (Child pays for fees)
-\item (Headers only download) For SPV security, but also helpful for clients that will gradually download the chain.
-\item (Verifiable Computing validation) SNARKs, Pinocchio or TinyRAM.
+\item (Relay Transaction/Block Preferences) Similar to mining behavior.
+\item (Header only block download)
+\item (Faster block relaying)
+\item (Misbehavior)
+\item (Client puzzles)
+\item (Stratum mining protocols)
 \end{itemize}
 
-\subsubsection{Security}
-Primarily based on how users store private keys necessary to authorize transactions. Mostly changes to an individual client, rather than network level changes.
+\subsubsection{Client/Agent}
 \begin{itemize}
-\item (Hierarchical Deterministic Wallet)
-\item (Encrypted Wallet)
-\item (Paper wallet)
-\item (Brain wallet)
-\item (Hardware wallet)
-\item (Compressed Work Sample) potentially more efficient than SCIP.
+\item (Blockchain/Index management) Pruning and Ultraprune. LevelDB and database change.
+\item (SPV vs Full Node Security)
+\item (Wallet, key storage) Encrypted wallet, HD wallet, brain wallet, paper wallet, etc.
+\item (Transaction Construction) Making change. This is where transaction anonymity is attacked, linking keys. Change transaction.
+\item (Hardware clients)
+\item (Decision making) Waiting 6 blocks for confirmation, or estimating an attack. Showing confirmations to the user. Snack and vending machine. SPV Security.
 \end{itemize}
-
 
 \begin{table}
 \begin{tabular}{c}
