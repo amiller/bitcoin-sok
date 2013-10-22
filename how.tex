@@ -6,6 +6,45 @@ Mining, transaction propagation.
 
 Introduction of currency. Use of exchanges, market places. Financial ecosystem.
 
+\subsection{A Explanation of Bitcoin in Steps}
+
+\paragraph{Step 1: Imagine there’s a trusted third party (TTP)}
+ Each participant is (somehow) assigned a single key pair which also acts as an address. The TTP allows anyone to send it messages and gives all participants a consistent view. Each participant (i.e., address) has some balance. We will defer the question of initial balances and where these balances come from.
+
+If Alice (address $A$) wants to send Bob (address $B$) value $v$, she sends to the TTP a signed statement, called a transaction, saying “address $A$ transfers value $v$ to address $B$.” The TTP verifies each transaction (checks that $v ≤ balanceA$) and ignores the ones that don’t verify.
+
+\paragraph{Step 2: Removing the TTP}
+
+If Alice (address $A$) wants to send Bob (address $B$) value $v$, she broadcasts a signed statement to all other participants saying “address $A$ transfers value $v$ to address $B$.” Once every 10 minutes, the participants themselves (replacing the TTP) conduct a protocol to a) propose a batch of valid transactions, called a block, and b) vote on these proposals to select one.
+
+Well known voting protocols have been studied, under some standard assumptions. First, it is assumed that a majority of the participants are honest. Second, it’s assumed that honest parties are able to broadcast synchronously to every other participant. Dishonest participants, on the other hand, are assumed to be able to equivocate, sending one message to some participants and a different message (or nothing) to others. Underlying all this is the fundamental assumption that there is a fixed set of participants that is known to everyone.
+
+\footnote{For efficiency, there are randomized protocols.\anote{survey of randomized consensus, breaking n^2 barrier}}
+
+\paragraph{Step 3: Removing limits on addresses}
+
+In reality, participants don’t have preassigned identities, so the assumption that there is a fixed set of participants is untenable. Therefore we replace that assumption with a much weaker one: Imagine that there’s a magic token that lands on a random participant (chosen uniformly) at regular intervals. \footnote{The magic token is recognizable and unforgeable: if a participant receives a message from a participant holding the token, she knows that the sender did in fact hold the token.}
+
+As before, participants broadcast each transaction to all other participants. When a participant gets the token she collects all the transactions she’s seen (in the most recent token interval), verifies them, and broadcasts the block.
+
+\anote{Description of the hash chain data structure, how participants process blocks, longest chain rule, and how this leads to probabilistic consensus if the majority of the identities are honest.}
+
+Note that participants can now create key pairs for themselves -- as many as they like. We have severed the link between participants and addresses. The only assumption is that the token selects participants uniformly at random, and hence selects an honest participant with a probability greater than $\frac{1}{2}$.
+
+\paragraph{Step 4: Removing the token: proof-of-work}
+
+Participants compete for possession of the token by racing to solve a proof-of-work based on hashing. Thus, participants acquire the token with a probability proportional to the fraction of Bitcoin’s hash power that they control. \footnote{there is a random nonce, so that each participant works on a different part of the problem space.} Attaching the proof-of-work to the block proves possession of the token, which is purely imaginary.
+
+Now, instead of the majority of participants being honest, we require that the majority of hash power be controlled by honest participants. Except for that change, the argument for consensus in Step 3 holds here as well.
+
+\paragraph{Step 5: Incentives}
+
+To better justify the assumption that a majority of participants (by CPU power) are honest, we provide an incentive for honest behavior. This is done by adding value to the balance of an address chosen by each participant that finds a proof-of-work solution. \footnote{This is also the mechanism by which the values money are initially distributed, in an arguably fair way.} \footnote{Everything described so far is merely an abstract system for transferring and tracking balances. For the incentive system to work, these balances must be interpreted as money.}
+
+This suggests a bootstrapping argument. If the transaction log is secure (has integrity and availability), then it will be useful as money, and therefore value added to an account makes a worthwhile incentive. This in turn will encourage a large amount of participation, which ensures the transaction log is secure.
+
+This appears to be a virtuous cycle. On the other hand, neither system can exist without the other. If the integrity or the availability of the transaction log can be easily attacked, then we cannot expect it to maintain much value as a currency. Likewise, if the currency is not valuable as money, then it will not be an effective incentive for encouraging sufficient participation to prevent successful attacks.
+
 
 \subsection{System Attack Model and Consensus Requirements}
 
@@ -30,7 +69,6 @@ Stabilizing consistency is weaker than a typical distributed system. In a typica
 A typical definition of fairness or liveness would specify that *any* transaction should eventually accepted, without reference to adequate payment. However, since Bitcoin operates in a model with no established identities, this would be impossible due to the ability for an attacker to create sybil identities and flood the system.
 
 The view of Bitcoin as a platform is that the currency is only inherently useful to the extent that it allows you to pay for transaction fees. In this sense it is comparable to postage stamps.
-
 
 \subsection{Bitcoin's Model Assumptions}
 
