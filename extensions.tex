@@ -152,6 +152,103 @@ Bitcoin is not the sole cryptocurrency, instead it must be understood as the cur
 \item (Smart Contracts)
 \end{itemize}
 
+\newcommand{\riskpower}{$(\$\!/\!P)$}
+\newcommand{\overall}[1]{{~[ {#1} ]}}
+\newcommand{\Oh}[1]{{#1}}
+
+\begin{table*}
+\caption{Evaluation Summary of Protocols using Bitcoin as a Currency and/or a Transactional Platform ($m$ is the number of elements in the index, $n$ is the number of blocks for the duration of the protocol, $c$ is the number of transactions in a block}
+\centering
+\begin{tabular}{|r|r|r|r|r|r|r|r|r|r|r|}
+\hline 
+ & \multicolumn{3}{c|}{\textbf{Validation Cost Per Tx [Overall]}} & \multicolumn{4}{c|}{\textbf{Party Cost per Tx [Overall]}} &  &&\\
+\hline
+\textbf{Protocol} & \textbf{Comms} & \textbf{CPU} & \textbf{Space} & \textbf{Comms} & \textbf{CPU} & \textbf{Space} & \textbf{Time} & \textbf{Trust} & \textbf{Fork Required} & Other \\
+
+\hline Purchase (Full) & 
+$\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1} \overall{\Oh{m}}$ & 
+$\Oh{1} \overall{\Oh{nc}}$ & $\Oh{\log m} \overall{\Oh{nc \log m}}$ & $\Oh{1} \overall{\Oh{m}}$ & \riskpower & 
+Buyer trusts Seller & No & \\
+
+\hline Purchase (SPV) & 
+$\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1} \overall{\Oh{m}}$ & 
+$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & \riskpower & 
+Buyer trusts Seller & No & \\
+
+%% ``t*O(1)
+%% "O(t+log m) work
+%% "O(t) 
+%% "O(t)
+%% ``2($/P)
+\hline 
+Escrow (1 of t sigs) & 
+$\Oh{t}$ & $\Oh{t+\log m}$ & $\Oh{t}$ &
+$\Oh{t}$ & `` & `` & 2\riskpower & 
+Non-Colluding Escrow & No &  $$ \\
+
+\hline 
+P2SH Escrow & 
+$\Oh{1}$ & $\Oh{t+\log m}$ & $\Oh{t}$ &
+$\Oh{t}$ & `` & `` & 2\riskpower & 
+`` & No &  $$ \\
+
+
+\hline Green Address & 
+`` & `` & `` & 
+`` & `` & `` & 0 &
+Receiver trusts Sender & No & \\
+
+
+\hline Time-locked refund & \\
+`` & `` & `` &
+`` & `` & `` & 2\riskpower & \\
+
+\hline Micropayments & \\
+\hline Balance Query (Auth) & \\
+
+\hline \hline
+\hline Colored/Smart Coins & \\
+\hline MasterCoin & \\
+\hline Freimarkets & \\
+\hline OpenTransactions & \\
+
+\hline \hline
+\hline CommitCoin & \\
+\hline ChronoBit & \\
+\hline Tribute to Len & \\
+\hline OP\_DROP & \\
+
+\hline \hline
+\hline Zerocoin & \\
+\hline CoinJoin & \\
+\hline Agg. Sig. CoinJoin & \\
+\hline External Mixers & \\
+
+\hline \hline
+\hline Namecoin & \\
+\hline DIANNA & \\
+\hline Bitcoin-OTC & \\
+\hline Fidelity Bond & \\
+\hline Anonymous Credentials & \\
+
+\hline
+\hline Coin Flip & \\
+\hline Transaction Puzzle & \\
+\hline Vanity Address & \\
+
+\hline
+\hline TierNolan's protocol & \\
+\hline P2PTradeX & \\
+
+\hline & & & & & \\
+
+\hline & & & & & \\
+\hline & & & & & \\
+
+\hline  \hline 
+\end{tabular}
+\end{table*}
+
 
 
 \section{Proposed Modifications to the Platform}
