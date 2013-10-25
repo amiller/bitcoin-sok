@@ -68,17 +68,15 @@ On one hand, the reference client accounts for the largest number of Bitcoin nod
 
 The standard usage of Bitcoin is for financial transactions, in particular payments, denominated in the built-in currency. However there are a variety of more complicated financial transactions, including the construction of other currencies overlayed, as well as other uses, such as timestamping.
 
-These proposals can be compared and evaluated in several ways.
-
 A summary of this comparison, applied to the proposals we have collected, is provided in Table \ref{tbl:protocols}.
 
 \subsection{Descriptions of the Columns}
-Protocols using Bitcoin as a platform can be evaluated in the following ways:
+Protocols using Bitcoin as a platform can be evaluated in several ways:
 \begin{itemize}
-\item What computational resources they require from the platform. This primarily consists of a) the amount of communications for the necessary transactions, b) the amount of storage required in the replicated index, c) the cost of validating a transaction.
-\item The computational resources required of the protocol participants. This includes external storage, computation, and communication, as well as the amount of time and interaction required.
-\item Attack model and failure modes (e.g., sensitivity to race conditions). Is trust required between the participants?
-\item What modifications to the existing Bitcoin protocol (if any) are required.
+\item {\em Validation Costs.} The computational resource burden imposed on the network. This primarily consists of a) the total amount of communications that must be broadcast to the network (i.e., the size and number of transactions involved), b) the amount of storage that the transaction places in the replicated index, and c) the cost of validating a transaction.
+\item {\em Party Costs.} This includes external storage, computation, and communication, as well as the amount of time and interaction required.
+\item {\em Trust Model} Attack model and failure modes (e.g., sensitivity to race conditions). Is trust between the participants required (or utilized)?
+\item {\em Fork Required?} What modifications to the existing Bitcoin protocol (if any) are required.
 \end{itemize}
 
 \subsection{Descriptions of the Rows}
@@ -136,7 +134,7 @@ Standard Bitcoin transactions are published in the clear, although account numbe
 \item (Anonymous Credentials)
 \end{itemize}
 
-\subsubsection{Multi-Chain Transactions}
+\subsubsection{Cross-Chain Transactions}
 Bitcoin is not the sole cryptocurrency, instead it must be understood as the currently-dominant member of a potentially unbounded ecosystem of possibly competing or cooperating crypto-currencies. The simplest interaction between two related currencies is akin to a foreign currency exchange.
 
 \begin{itemize}
@@ -166,12 +164,12 @@ Bitcoin is not the sole cryptocurrency, instead it must be understood as the cur
 \textbf{Protocol} & \textbf{Comms} & \textbf{CPU} & \textbf{Space} & \textbf{Comms} & \textbf{CPU} & \textbf{Space} & \textbf{Time} & \textbf{Trust} & \textbf{Fork Required} & Other \\
 
 \hline Purchase (Full) & 
-$\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1} \overall{\Oh{m}}$ & 
+$\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
 $\Oh{1} \overall{\Oh{nc}}$ & $\Oh{\log m} \overall{\Oh{nc \log m}}$ & $\Oh{1} \overall{\Oh{m}}$ & \riskpower & 
 Buyer trusts Seller & No & \\
 
 \hline Purchase (SPV) & 
-$\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1} \overall{\Oh{m}}$ & 
+$\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
 $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & \riskpower & 
 Buyer trusts Seller & No & \\
 
@@ -199,53 +197,102 @@ $\Oh{t}$ & `` & `` & 2\riskpower &
 Receiver trusts Sender & No & \\
 
 
-\hline Time-locked refund & \\
-`` & `` & `` &
-`` & `` & `` & 2\riskpower & \\
+\hline Micropayments & 
+$\Oh{1/f}$ & $\Oh{1/f \log m}$ & $\Oh{1/f}$ & 
+$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & \riskpower & 
+ & & \\
 
-\hline Micropayments & \\
-\hline Balance Query (Auth) & \\
-
-\hline \hline
-\hline Colored/Smart Coins & \\
-\hline MasterCoin & \\
-\hline Freimarkets & \\
-\hline OpenTransactions & \\
+%\hline Balance Query (Auth) & \\
 
 \hline \hline
-\hline CommitCoin & \\
-\hline ChronoBit & \\
-\hline Tribute to Len & \\
-\hline OP\_DROP & \\
+\hline Colored/Smart Coins & 
+$\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
+$\Oh{n_C + \log c} \overall{\Oh{n}}$ & $\Oh{n_C + \log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & \riskpower & 
+ & & \\
+
+\hline MasterCoin & 
+$\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
+$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & \riskpower & 
+ & & \\
+
+\hline Freimarkets & 
+$\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
+$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & \riskpower & 
+ & & \\
+
+%\hline OpenTransactions & \\
+
+%\hline ChronoBit & \\
+%\hline Tribute to Len & \\
+%\hline OP\_DROP & \\
 
 \hline \hline
-\hline Zerocoin & \\
-\hline CoinJoin & \\
-\hline Agg. Sig. CoinJoin & \\
-\hline External Mixers & \\
+\hline Zerocoin & 
+$\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
+$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & \riskpower & 
+ & & \\
+
+\hline CoinJoin & 
+$\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
+$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & \riskpower & 
+ & & \\
+
+\hline Agg. Sig. CoinJoin & 
+$\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
+$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & \riskpower & 
+ & & \\
+
+\hline External Mixers & 
+$\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
+$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & \riskpower & 
+ & & \\
 
 \hline \hline
-\hline Namecoin & \\
-\hline DIANNA & \\
-\hline Bitcoin-OTC & \\
-\hline Fidelity Bond & \\
-\hline Anonymous Credentials & \\
+\hline Namecoin &
+$\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
+$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & \riskpower & 
+ & & \\
+
+\hline Fidelity Bond & 
+$\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
+$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & \riskpower &
+ & & \\
+
+\hline Anonymous Credentials & 
+$\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
+$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & \riskpower & 
+ & & \\
 
 \hline
-\hline Coin Flip & \\
-\hline Transaction Puzzle & \\
-\hline Vanity Address & \\
+\hline CommitCoin & 
+$\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
+$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & \riskpower & 
+ & & \\
+
+\hline Coin Flip & 
+$\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
+$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & \riskpower & 
+ & & \\
+
+\hline Transaction Puzzle & 
+$\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
+$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & \riskpower & 
+ & & \\
+
+%\hline Vanity Address & \\
 
 \hline
-\hline TierNolan's protocol & \\
-\hline P2PTradeX & \\
+\hline TierNolan's protocol & 
+$\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
+$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & \riskpower & 
+ & & \\
 
-\hline & & & & & \\
+\hline P2PTradeX & 
+$\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
+$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & \riskpower &
+ & & \\
+\hline
 
-\hline & & & & & \\
-\hline & & & & & \\
-
-\hline  \hline 
 \end{tabular}
 \end{table*}
 
