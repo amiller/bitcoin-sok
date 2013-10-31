@@ -150,28 +150,31 @@ Bitcoin is not the sole cryptocurrency, instead it must be understood as the cur
 \item (Smart Contracts)
 \end{itemize}
 
-\newcommand{\riskpower}{$(\$\!/\!P)$}
+\newcommand{\riskpower}{K}
 \newcommand{\overall}[1]{{~[ {#1} ]}}
 \newcommand{\Oh}[1]{{#1}}
 
-\begin{table*}
+\begin{landscape}
+%\begin{sidewaystable}
+\begin{table}
 \caption{Evaluation Summary of Protocols using Bitcoin as a Currency and/or a Transactional Platform ($m$ is the number of elements in the index, $n$ is the number of blocks for the duration of the protocol, $c$ is the number of transactions in a block}
 \centering
-\begin{tabular}{|r|r|r|r|r|r|r|r|r|r|r|}
+\begin{tabular}{|r|r|r|r|r|r|r|r|r|r|r|r|}
 \hline 
- & \multicolumn{3}{c|}{\textbf{Validation Cost Per Tx [Overall]}} & \multicolumn{4}{c|}{\textbf{Party Cost per Tx [Overall]}} &  &&\\
+ & \multicolumn{3}{c|}{\textbf{Validation Cost Per Tx [Overall]}} & \multicolumn{4}{c|}{\textbf{Party Cost per Tx [Overall]}} &  && &\\
 \hline
-\textbf{Protocol} & \textbf{Comms} & \textbf{CPU} & \textbf{Space} & \textbf{Comms} & \textbf{CPU} & \textbf{Space} & \textbf{Time} & \textbf{Trust} & \textbf{Fork Required} & Other \\
+\textbf{Protocol} & \textbf{Comms} & \textbf{CPU} & \textbf{Space} & \textbf{Comms} & \textbf{CPU} & \textbf{Space} & \textbf{Time} & \textbf{Trust} & \textbf{Fork} & \textbf{Advantages} & \textbf{Disadvantages} \\
 
-\hline Purchase (Full) & 
+\hline \hline \textbf{Purchases} \\ 
+\hline Standard &
 $\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
-$\Oh{1} \overall{\Oh{nc}}$ & $\Oh{\log m} \overall{\Oh{nc \log m}}$ & $\Oh{1} \overall{\Oh{m}}$ & \riskpower & 
-Buyer trusts Seller & No & \\
+$\Oh{1} \overall{\Oh{nc}}$ & $\Oh{\log m} \overall{\Oh{nc \log m}}$ & $\Oh{1} \overall{\Oh{m}}$ & 1\riskpower & 
+Merc & No & & \\
 
-\hline Purchase (SPV) & 
+\hline SPV-security & 
 $\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
-$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & \riskpower & 
-Buyer trusts Seller & No & \\
+$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & 1\riskpower & 
+Merc & No & Less party cost & \\
 
 %% ``t*O(1)
 %% "O(t+log m) work
@@ -181,44 +184,43 @@ Buyer trusts Seller & No & \\
 \hline 
 Escrow (1 of t sigs) & 
 $\Oh{t}$ & $\Oh{t+\log m}$ & $\Oh{t}$ &
-$\Oh{t}$ & `` & `` & 2\riskpower & 
-Non-Colluding Escrow & No &  $$ \\
+$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & 2\riskpower & 
+3rd & No & No Merc trust & Limited 3rd party\\
 
-\hline 
-P2SH Escrow & 
-$\Oh{1}$ & $\Oh{t+\log m}$ & $\Oh{t}$ &
-$\Oh{t}$ & `` & `` & 2\riskpower & 
-`` & No &  $$ \\
-
+%% \hline 
+%% P2SH Escrow & 
+%% $\Oh{1}$ & $\Oh{t+\log m}$ & $\Oh{t}$ &
+%% $\Oh{t}$ & `` & `` & 2\riskpower & 
+%% `` & No &  $$ \\
 
 \hline Green Address & 
-`` & `` & `` & 
-`` & `` & `` & 0 &
-Receiver trusts Sender & No & \\
+$\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
+$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & $\Oh{1}$ & 
+Merc,3rd & No & Instant confirm & 3rd party trust\\
 
 
 \hline Micropayments & 
 $\Oh{1/f}$ & $\Oh{1/f \log m}$ & $\Oh{1/f}$ & 
-$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & \riskpower & 
- & & \\
+$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & 2\riskpower & 
+ None & No & Low cost, trust & Incr. goods \\
 
 %\hline Balance Query (Auth) & \\
 
-\hline \hline
-\hline Colored/Smart Coins & 
-$\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
-$\Oh{n_C + \log c} \overall{\Oh{n}}$ & $\Oh{n_C + \log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & \riskpower & 
- & & \\
-
+\hline \hline \textbf{Overlay Coins} \\
 \hline MasterCoin & 
 $\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
-$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & \riskpower & 
- & & \\
+$\Oh{1} \overall{\Oh{nc}}$ & $\Oh{\log m} \overall{\Oh{nc_{\cal M} \log m_{\cal M}}}$ & $\Oh{1} \overall{\Oh{m_{\cal M}}}$ & 1\riskpower & 
+ Issuer & No & & High overhead \\
+
+\hline Colored/Smart Coins & 
+$\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
+$\Oh{n_{\cal C} + \log c} \overall{\Oh{n}}$ & $\Oh{n_{\cal C} + \log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & 1\riskpower & 
+ Issuer & Lower overhead & & \\
 
 \hline Freimarkets & 
 $\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
-$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & \riskpower & 
- & & \\
+$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & 1\riskpower & 
+ Issuer & Yes & Low overhead & Fork required \\
 
 %\hline OpenTransactions & \\
 
@@ -226,76 +228,77 @@ $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overa
 %\hline Tribute to Len & \\
 %\hline OP\_DROP & \\
 
-\hline \hline
+\hline \hline \textbf{Private Transactions} \\ 
 \hline Zerocoin & 
-$\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
-$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & \riskpower & 
- & & \\
+$\Oh{1}$ & $\Oh{\log m + \log n}$ & $\Oh{1} \overall{m+n}$ & 
+$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & 2\riskpower + w &
+ None & Yes & & High cost \\
 
 \hline CoinJoin & 
-$\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
-$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & \riskpower & 
- & & \\
+$\Oh{q}$ & $\Oh{q \log m}$ & $\Oh{q}$ & 
+$\Oh{q + \log c} \overall{\Oh{n}}$ & $\Oh{q + \log c} \overall{\Oh{n}}$ & $\Oh{q} \overall{\Oh{1}}$ & 1\riskpower & 
+ None & No & & DoS \\
 
-\hline Agg. Sig. CoinJoin & 
-$\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
-$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & \riskpower & 
- & & \\
+%% \hline Agg. Sig. CoinJoin & 
+%% $\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
+%% $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & 1\riskpower & 
+%%  & & \\
 
-\hline External Mixers & 
-$\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
-$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & \riskpower & 
- & & \\
+%% \hline External Mixers & 
+%% $\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
+%% $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & 1\riskpower & 
+%%  & & \\
 
-\hline \hline
+\hline \hline \textbf{Credentials} \\
 \hline Namecoin &
 $\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
-$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & \riskpower & 
- & & \\
+$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & 1\riskpower & 
+ None & Yes & & \\
 
 \hline Fidelity Bond & 
 $\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
-$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & \riskpower &
- & & \\
+$\Oh{n + \log c} \overall{\Oh{n}}$ & $\Oh{n + \log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & 1\riskpower &
+ None & No & & Expensive \\
 
 \hline Anonymous Credentials & 
 $\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
-$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & \riskpower & 
- & & \\
+$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{nc + \log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & 1\riskpower & 
+ PKI & No & & Scanning cost \\
 
-\hline
+\hline \hline \textbf{Other} \\ 
 \hline CommitCoin & 
 $\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
-$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & \riskpower & 
- & & \\
+$\Oh{d + n + \log c} \overall{\Oh{n}}$ & $\Oh{n + \log c} \overall{\Oh{n}}$ & $\Oh{d} \overall{\Oh{1}}$ & 1\riskpower & 
+ None & No & & \\
 
 \hline Coin Flip & 
 $\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
-$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & \riskpower & 
- & & \\
+$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & 2\riskpower & 
+ Pub. Verif. & No & & \\
 
 \hline Transaction Puzzle & 
 $\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
-$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & \riskpower & 
- & & \\
+$\Oh{1} \overall{\Oh{1}}$ & $\Oh{w} \overall{1}$ & $\Oh{1} \overall{\Oh{1}}$ & $\Oh{w + 1/\alpha}$ & 
+ None & No & & Miner only \\
 
 %\hline Vanity Address & \\
 
-\hline
+\hline \hline \textbf{Cross-Chain Swap} \\ 
 \hline TierNolan's protocol & 
 $\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
-$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & \riskpower & 
- & & \\
+$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & 3\riskpower & 
+None & No & & \\
 
 \hline P2PTradeX & 
 $\Oh{1}$ & $\Oh{\log m}$ & $\Oh{1}$ & 
-$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & \riskpower &
- & & \\
+$\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{\log c} \overall{\Oh{n}}$ & $\Oh{1} \overall{\Oh{1}}$ & 2\riskpower &
+None & Alt & & Altcoin only \\
 \hline
 
 \end{tabular}
-\end{table*}
-
+\end{table}
+%\end{sidewaystable}
+\end{landscape}
 
 
 \section{Proposed Modifications to the Platform}
