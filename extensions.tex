@@ -68,21 +68,23 @@ On one hand, the reference client accounts for the largest number of Bitcoin nod
 
 The standard usage of Bitcoin is for financial transactions, in particular payments, denominated in the built-in currency. However there are a variety of more complicated financial transactions, including the construction of other currencies overlayed, as well as other uses, such as timestamping.
 
-A summary of this comparison, applied to the proposals we have collected, is provided in Table \ref{tbl:protocols}.
-
-\subsection{Descriptions of the Columns}
 Protocols using Bitcoin as a platform can be evaluated in several ways:
 \begin{itemize}
-\item {\em Validation Costs.} The computational resource burden imposed on the network. This primarily consists of a) the total amount of communications that must be broadcast to the network (i.e., the size and number of transactions involved), b) the amount of storage that the transaction places in the replicated index, and c) the cost of validating a transaction.
-\item {\em Party Costs.} This includes external storage, computation, and communication, as well as the amount of time and interaction required.
-\item {\em Trust Model} Attack model and failure modes (e.g., sensitivity to race conditions). Is trust between the participants required (or utilized)?
+\item {\em Validation Costs.} The computational resource burden imposed on the network. This primarily consists of a) the total amount of communications that must be broadcast to the network (i.e., the size and number of transactions involved), b) the amount of storage that the transaction places in the replicated index, and c) the cost of validating a transaction. We analyze these according to the asymptotic cost, per transaction. In addition to the per-contract cost, there may also be an overall cost independent of the per-transaction cost; we indicate this cost in brackets.
+
+\item {\em Party Costs.} Parties that participate in an outer protocol using Bitcoin as a component may have to provide their own additional communication resources as well. This includes local storage, computation, and communication (with either peers in the Bitcoin network or the other parties of the outer party), as well as the amount of time required before the transaction is complete. As with validation, there may be a baseline cost independent of the per-transaction cost; this is indicated in brackets.
+
+\item {\em Trust Model.} While the Bitcoin network itself does not rely on trust in any designated party, outer protocols using Bitcoin are often characterized by leveraging or relying on trust in one of the parties. We indicate these by codes which will be described in the sections 
+
 \item {\em Fork Required?} What modifications to the existing Bitcoin protocol (if any) are required.
 \end{itemize}
 
+A summary of this comparison, applied to the proposals we have collected, is provided in Table \ref{tbl:protocols}.
+
 \subsection{Descriptions of the Rows}
 
-\subsubsection{Standard Financial Transactions}
-Standard Financial Transactions involve the transfer or exchange of Bitcoin as money.
+\subsubsection{Purchases}
+Purchases involve the transfer or exchange of Bitcoin as money, wherein a Buyer orders a good from a Merchant, pays, and then the Merchant delivers the good. {\bf Merc} indicates that the Merchant must be trusted to complete the delivery; {\bf 3rd} indicates that a third party, separate from the Buyer and Merchant, is trusted to intermediate.
 \begin{itemize}
 \item (Purchase, SPV) In a standard Bitcoin transaction, a Buyer transfers a quantity of BTC to a Seller by publishing a transaction referring to a coin currently owned by the Buyer, and rededicating it to a public key owned by the Seller. The Seller waits for some number of confirmations, until he is confident that the block containing the transaction will not be revised, and then performs an irrevocable action, such as shipping an item to the Buyer. To check that the transaction is valid before including it in a block, a miner checks one public key signature, and queries the index of unspent coins, which takes $O(log m)$ time overall, where $m$ is the size of the index. The Seller does not need to fetch the entire contents of each block - it is sufficient only to check just the proof-of-work, since it is assumed that the hashpower of the honest participants on the network is steady, and only mine valid blocks - this is an example of SPV security. Note that the Buyer must trust the Seller to fulfill his end of the arrangement.
 
@@ -99,39 +101,36 @@ Standard Financial Transactions involve the transfer or exchange of Bitcoin as m
 \end{itemize}
 
 \subsubsection{Overlay Currencies}
-Besides using Bitcoin as money, Bitcoin as a platform can also be used to maintain alternate currencies, such as personally-issued IOU coins, transferable shares in a Business, etc.
+Besides using Bitcoin as money, Bitcoin as a platform can also be used to maintain alternate currencies, such as personally-issued IOU coins, transferable shares in a Business, etc. A colored coin is introduced by fiat - an issuer, such as the executive of a corporation, declares that a particular quantity in the new protocol should be regarded as a currency. The protocols place restrictions on how these quantities are used in transactions, such as guaranteeing they are conserved.
+{\bf Issuer}
+
 \begin{itemize}
-\item (Colored~\cite{coloredcoins,bitcointalk-coloredcoins} and SmartCoins~\cite{jgarzik-smartcoin}) Colored coins have been one of the most anticipated protocols built on top of Bitcoin. A colored coin is introduced by fiat - an issuer, such as the executive of a corporation, declares that a particular transaction output (containing $N$ currency units) is the genesis of a new color of bond, and that each portion of the coin corresponds to a portion of the bond. The issuer can transfer a portion of the bond to another user, using the ordinary transfer mechanism. In order to allow the bond to be further subdivided (or merged), rules are imposed that give users ability to trace the color through every possible transaction in such a way that a) the user is always able to construct a transaction that preserves the color, and b) the user cannot increase the amount of colored coins he has. Since ordinary miners do not perform any sort of validation specific to the colored coin, there is no notion of SPV security - in order to accept a colored coin as payment and validate that a transaction contains a valid colored coin, the acceptor must maintain an entire colored coin index, which is a constant factor larger than an ordinary index. This scheme benefits from the use of Bitcoin as an append-only log, but does not benefit from the presence of validation rules.
-\item (MasterCoin~\cite{mastercoin}) Similar to colored coins, MasterCoin proposes to create overlay currencies using Bitcoin as an append only log, but without validation rules. Whereas Colored Coins use existing Bitcoins as carriers of currency quantities, MasterCoin proposes to place arbitrary data packets with in Bitcoin transactions, of which only the first valid subsequence is considered authoritative. The index required to participate in MasterCoin is potentially unbounded with respect to the size of the ordinary Bitcoin index.
-\item (Freimarkets~\cite{freimarkets} and Ripple) Whereas Colored Coins and Master Coin involve the creation of overlay currencies without validation, Ripple proposes to build the rules governing such overlay currencies directly into the validation rules. This increases the cost of validation, however it restores the ability to use SPV security, where users do not need to store the entire index. Note that Ripple also proposes a different consensus model based on designated trusted entities rather than incentivized proof-of-work.
+\item (MasterCoin~\cite{mastercoin}) MasterCoin proposes to create overlay currencies by building an entirely separate transaction protocol that uses Bitcoin as the underlying global append-only log. The observation is that arbitrary data packets can be embedded in Bitcoin transaction messages, and given a sequential ordering based on the contents of blocks. The first valid sequence of data packets is considered authoritative. The biggest drawback to this approach is cost; because Bitcoin is used only as an append-only log, miners do not perform any validation. The validity of a particular data packet cannot be determined except with knowledge of the previous history of transactions. Therefore determining whether a MasterCoin packet represents a valid coin requires processing every Bitcoin transaction in order to determine if it is a Mastercoin transaction, and maintaining a sufficient index.
+
+\item (Colored~\cite{coloredcoins,bitcointalk-coloredcoins} and SmartCoins~\cite{jgarzik-smartcoin}) Colored coins have similar goals to MasterCoin. The difference is that colored coins make use of the transaction structure of ordinary Bitcoin, rather than using a separate data protocol. Each unit of a colored coin is ``carried'' by units of Bitcoins. There is thus some corresponding notion of SPV security. It can only be valid if every input corresponds to a previous valid transaction, etc. However, in order to determine the color of the coin, you must traverse the entire relevant subgraph of transactions, bounded by $n_{\cal C}$, the number of transactions associated with color ${\cal C}$.
+
+\item (Freimarkets~\cite{freimarkets} and Ripple) Whereas Colored Coins and Master Coin involve the creation of overlay currencies using, Ripple proposes to build the rules governing such overlay currencies directly into the validation rules. This increases the cost of validation, however it restores the ability to use SPV security, where users do not need to store the entire index. Note that Ripple also proposes a different consensus model based on designated trusted entities rather than incentivized proof-of-work.
+
 %\item (OpenTransactions) A simpler approach to overlay currencies is to maintain the overlay currencies using a separate third-party server. Arguably such a scheme has little to do with Bitcoin, except that the alternate currencies can be exchanged.
 \end{itemize}
 
-\subsubsection{Timestamped Publishing}
-One non-financial use of Bitcoin is as a document timestamping system. There are several ways of doing this that have varying tradeoffs.
-\begin{itemize}
-\item (CommitCoin) In CommitCoin, the hash of a document is embedded in the public key of a transaction that is published and timestamped in the blockchain. The user must store the document herself, and at any later time can publish the document and prove to anyone else that the hash of the document was known previously to the timestamped date.
-\item (ChronoBit) ChronoBit is similar to CommitCoin, except that the client delegates storing the document itself to a third party service. The third party service must be relied on for liveness - if it loses the document, the client will not be able to prove anything. Instead of embedding the hash in a transaction, it is included in the special coinbase transaction created mining a block.
-\item (OP\_DROP) Rather than publishing the hash of a document, it would be possible to publish the entire document itself in a transaction. A special opcode, OP\_DROP, was proposed to allow inclusion of arbitrary data in a transaction in such a way that it can be immediately pruned. At this time, it has not been included.
-\item (Tribute to Len) An alternate approach is to encode a document directly into the bytes that normally contain public key. This requires burning money - the Bitcoins associated with the non-public-key can never be reclaimed. The document also cannot be pruned, and will be fully replicated forever on every client.
-\end{itemize}
-
 \subsubsection{Private Transactions}
-Standard Bitcoin transactions are published in the clear, although account numbers are typically not associated with any real world identity. Publishing transactions makes it easy to verify that system invariants are maintained, for example that the total amount of currency is conserved. However, many users would prefer their financial transactions to be kept private. There are several approaches to obscuring relations between keys, essentially by performing a mix of some kind.
+Standard Bitcoin transactions are published in the clear, although account numbers are typically not associated with any real world identity. Publishing transactions makes it easy to verify that system invariants are maintained, for example that the total amount of currency is conserved. However, many users would prefer their financial transactions to be kept private. There are several approaches to obscuring relations between keys, essentially by performing a mix of some kind. The simplest solution involves a third party server that is trusted to delete its logs. On the other hand, the following two approaches enable secure coin-mixing without the involvement of a third party.
 
 \begin{itemize}
-\item (Mixers) The simplest (and most common) approach is for parties to transfer equal amounts of coins to a trusted third party mixer, who shuffles the coins, returns them to their owners, and deletes its log. Using Chaumian blinded signatures, users may not need to trust the mixer to delete logs, although they will still need to trust the mixer not to abscond with their funds. Using zero knowledge techniques, the operation of a third party mixer can be made publicly verifiable, which further reduces the likelihood of the mix stealing funds without getting caught.
+%% \item (Mixers) The simplest (and most common) approach is for parties to transfer equal amounts of coins to a trusted third party mixer, who shuffles the coins, returns them to their owners, and deletes its log. Using Chaumian blinded signatures, users may not need to trust the mixer to delete logs, although they will still need to trust the mixer not to abscond with their funds. Using zero knowledge techniques, the operation of a third party mixer can be made publicly verifiable, which further reduces the likelihood of the mix stealing funds without getting caught.
 \item (CoinJoin) A shuffle of $n$ transaction inputs and $n$ transaction outputs can be conducted atomically using a single transaction. However, this requires several rounds after which each party signs the entire transaction. Notably, it is easy for an attacker to prevent the mix from completing.
-\item (Aggregate-Signature CoinJoin) Using aggregate signatures, the transaction can be signed incrementally, reducing the amount of interaction needed to perform an atomic mix.
 \item (ZeroCoin)~\cite{miers2013zerocoin} Perhaps the most thorough solution is to embed the functionality of a publicly verifiable (and public coin) third party mix directly into the validation rules of the block chain. This incurs additional validation cost.
+%% \item (Aggregate-Signature CoinJoin) Using aggregate signatures, the transaction can be signed incrementally, reducing the amount of interaction needed to perform an atomic mix.
 \end{itemize}
 
-\subsubsection{DNS / Certificate List}
+\subsubsection{Credentials}
+
 \begin{itemize}
-\item (Bitcoin-OTC) As mentioned before, despite the lack of trusted entities required for money transfers in Bitcoin, even a simple purchase requires some degree of trust between a Buyer and a Seller. Reputation aggregation systems, similar to the ones provided by eBay and Amazon, can be used to motivate honesty and discourage damaging a reputation. A popular reputation aggregation system for the Bitcoin community is run as a third party service. Conceptually a similar system could be modified to run within the Bitcoin system itself.
+%% \item (Bitcoin-OTC) As mentioned before, despite the lack of trusted entities required for money transfers in Bitcoin, even a simple purchase requires some degree of trust between a Buyer and a Seller. Reputation aggregation systems, similar to the ones provided by eBay and Amazon, can be used to motivate honesty and discourage damaging a reputation. A popular reputation aggregation system for the Bitcoin community is run as a third party service. Conceptually a similar system could be modified to run within the Bitcoin system itself.
 \item (Namecoin) An altcoin has been proposed to serve the functionality of the current Domain Name System. The validation rules are augmented to include updates of domain name records. Unused domain names cost a minimal fee to register initially, but the owner of a domain name can sell it (atomically) for an arbitrary price. Periodic renewal fees discourage squatting of domain names.
 \item (Fidelity Bond) A general approach to meaningful identities in an otherwise anonymous environment is to require something of value invested in each identity. By burning or encumbering a quantity of money associated with a particular name, a party can signal that they value the reputation associated with this identity.
-\item (Anonymous Credentials)
+\item (Anonymous Credentials) The {\bf Issuer} code here indicates that the root identity issuer must be trusted to assign identities correctly.
 \end{itemize}
 
 \subsubsection{Cross-Chain Transactions}
@@ -143,11 +142,10 @@ Bitcoin is not the sole cryptocurrency, instead it must be understood as the cur
 \end{itemize}
 
 \subsubsection{Other}
-
 \begin{itemize}
 \item (Coin Flip) Satoshi-dice
 \item (Transaction Puzzle) A special instance of a transaction puzzle could be a Vanity Address.
-\item (Smart Contracts)
+\item (CommitCoin) In CommitCoin, the hash of a document is embedded in the public key of a transaction that is published and timestamped in the blockchain. The user must store the document herself, and at any later time can publish the document and prove to anyone else that the hash of the document was known previously to the timestamped date.
 \end{itemize}
 
 \newcommand{\riskpower}{K}
