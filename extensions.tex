@@ -1,9 +1,8 @@
-\section{ Evaluation of Crypto-currency design space }
+\section{ Exploration of the Cryptocurrency design space }
 
 Since Bitcoin's inception, a vibrant community of participants and open source developers, as well as a number of researchers, have suggested improvements and extensions. We have developed a framework to aggregate and systematically evaluate these contributions. 
 
 Two main categorizations stand out: a) there are proposals for protocols that use Bitcoin (or a variant) as a platform, and b) there are proposals for modifications to the platform itself. We treat these separately.
-
 
 
 \subsection{ Source Collection: Technical Discussions from the Bitcoin Community}
@@ -15,7 +14,6 @@ Technical discussions and formal presentation of Bitcoin extension ideas are pri
 \item Bitcoin wiki
 \item Bitcoin Improvement Proposals
 \end{itemize}
-\anote{Numbers for all of these?}
 Our methodology involves collecting ideas from these and analyzing them.
 
 As a resource to researchers, the discussions and ideas discussed in these venues represent a) what is desired about Bitcoin from its participants, b) what concerns or as of yet unexplained, c) what is thought to be possible or difficult, tradeoffs, which provide starting points for other research, and d) what facilitates actual deployment.
@@ -33,16 +31,16 @@ Suggested improvements to Bitcoin generally fall into the following categories:
 \begin{itemize}
 \item Efficiency improvements
 \item Increased stability and security (against various threats to the overall network, or economic stability)
-\item Additional functionality, to allow new uses
+\item Additional functionality, to enable new uses.
 \end{itemize}
 
-We prefer to distinguish between security as it concerns the health/stability of network system overall (e.g., as concerns Proof-of-Stake, Block times) and security of users (e.g., ZeroCoin, better keys or password protection).
+We prefer to distinguish between two kinds of security: as it concerns the health/stability of network system overall (e.g., as concerns Proof-of-Stake, Block times) and security of users (e.g., ZeroCoin, better keys or password protection).
 
 It's worth identifying that there are many roles in Bitcoin.
 \begin{itemize}
-\item Transactions and relaying
-\item Mining, including mining pools
-\item Exchanging, mixing, mirroring, merchants, and other services
+\item Participation as a node, i.e. relaying transactions and blocks
+\item Mining, including participation in a mining pool
+\item Exchanging, mixing, mirroring, merchants, and other services interacting with the currency itself.
 \end{itemize}
 A desirable feature may impact some roles but not others. For example, transaction privacy (e.g., Zerocoin) increases the security users but has no direct impact on miners. Likewise, additional costs to miners (or validating nodes) do not necessarily impact users directly.
 
@@ -61,7 +59,6 @@ Due to the need for governance, everyone to agree on the constitutional rules, t
 This imposes a hierarchy of extensions. In our terminology, an extension to Bitcoin may require only modifications to the client - anything that modifies how a user interacts with Bitcoin can count as a modification. We do mean to rule out things like ATMs that interact with the ordinary Bitcoin client. Bitcoin, even its current form, supports a number of extensible uses. Enables protocols between individuals, use Bitcoin in some way.
 
 On one hand, the reference client accounts for the largest number of Bitcoin nodes. However as many users turn to hosted bitcoin wallets, it is hard to assign an actual user number to these.
-
 
 
 \section{ Protocols using Bitcoin as a Platform }

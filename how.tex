@@ -53,27 +53,37 @@ The Bitcoin mining consensus proof from the whitepaper, assuming a majority of t
 Although, so far, the economic incentive system seems to work, there are only heuristics and no clear model. As best we can tell, the reasoning is circular. Incentive system is needed to make the system secure. The built-in currency that rewards participants has to be valuable for the incentive to be meaningful. The currency is valuable only if the system is secure. The ``death spiral.''
 
 
-\subsection{Bitcoin as an Abstract Platform}
+\subsection{Law, Log, and Index: An Abstraction of Bitcoin as a Platform}
 
-What functionality does Bitcoin provide in the abstract? Originally presented as a mechanism for online ``payments,'' in the abstract it is a much more versatile platform.
+Abstractly speaking, what functionality does Bitcoin -- or more importantly, the innovations embodied by it -- provide? Originally presented as a mechanism for online ``payments,'' in the abstract it is a much more versatile platform.
 
-The following is an abstract description of Bitcoin's goals, independent of system assumptions or implementation:
-\begin{itemize}
-\item (Append-only Log with Stabilizing-Consistency) The network eventually stabilizes to a single global view of a linear ordering of transactions. Unlike standard consistency, there is not necessarily a final time at which it's guaranteed to be settled. The more time passes, the more likely that a current view is settled. Given a model of attacker strength, and security probability, one can calculate an amount of time to wait before considering a prefix to be authoritative.
-\item (Validation) Only valid transactions are committed to the log, where 'validity' is a function of the prior history of transactions.
-\item (Fairness) After expending sufficient resources (i.e., by paying a fee), any transaction is eventually committed to the log.
-\end{itemize}
+\begin{enumerate}
+\item (Log) A sequential broadcast medium. Every user eventually (in a short amount of time, with high probability) agrees on a global sequential log of messages (and every user receives every message in its entirety). Any user can publish a message, and it will be included in the log within a short time (although, a monetary fee may be required for timely service).
+\item (Index) Participants on the network maintain a globally replicated storage index. Every message in the broadcast log is processed, and in some cases causes updates to the index. These indexes can be relied on as concise summaries of the public broadcast record.
+\item (Law) The broadcast log may additionally contain data that reflecting the result of computations, including queries to the index.
+\end{enumerate}
 
-Stabilizing consistency is weaker than a typical distributed system. In a typical distributed system, you receive an acknowledgment at some finite time that the transaction has been committed. In Bitcoin, there is no such acknowledgment, and users must user their own discretion about how long to wait to consider a transaction committed.
+This framework can be used to understand the design differences between many Bitcoin-related proposals, all of which are special cases of the general structure. As an example, the standard usage of Bitcoin can be described as the following instance:
+\begin{enumerate}
+\item The broadcast log is used to publish signed messages called ``transactions'', which reflect an intent to transfer quantities of currency from one account to another. Quantities of the currency may also be set aside as fees.
+\item Participants maintain a \emph{ledger} containing a mapping between every quantity of currency and the public key of its current owner. This index must be updated to reflect the new balance after every transaction.
+\item Transactions are considered ``valid'' only if the attached signatures are valid with respect to the public keys in the current ledger, and if they spend a reasonable amount of money. In fact, only transactions that are valid according to these rules may be included in the log (although arbitrary data --- including invalid transactions --- may still be published as auxiliary data contained within a valid transaction).
+\end{enumerate}
+All three of these components are necessary, and complement each other. The sequential log is used to ensure that no two transactions double-spend the same quantity of currency. On the other hand, since only valid transactions carry fees, the index is used to ensure that data needed to validate transactions is readily available.
 
-A typical definition of fairness or liveness would specify that *any* transaction should eventually accepted, without reference to adequate payment. However, since Bitcoin operates in a model with no established identities, this would be impossible due to the ability for an attacker to create sybil identities and flood the system.
+Since only valid transactions are included in the log, end-users (such as merchants with mobile devices) need only check that a transaction is included in order to confirm a payment. Although the log necessarily grows without bound, the mutable index does not; therefore nodes can ``prune'' old data from their main disks. These optimizations are discussed in more detail later on.
+
+Most proposals for Bitcoin-like variations, including overlay currencies such as Mastercoin and Colored Coins as well as more ambitious altcoins like Ethereum, can be described in a similar way as we will show in Section~\ref{}. Additionally, these key components provide a basis for evaluating the resource complexity of various schemes and use-cases.
 
 The view of Bitcoin as a platform is that the currency is only inherently useful to the extent that it allows you to pay for transaction fees. In this sense it is comparable to postage stamps.
 
-\subsection{Bitcoin's Model Assumptions}
+\subsection{Model Assumptions}
 
 Bitcoin's assumptions are weaker than in a standard distributed system - most notably, there are no pre-established identities. On the other hand, the assumptions are about the rational preferences of population - specifically that they respond to incentives, even when the incentives are inconclusive. Seems to be circular?
 
+Stabilizing consistency is weaker than a typical distributed system. In a typical distributed system, you receive an acknowledgment at some finite time that the transaction has been committed. In Bitcoin, there is no such acknowledgment, and users must user their own discretion about how long to wait to consider a transaction committed. \anote{This is partially a historical note, meant to clarify how Bitcoin's version of consensus/broadcast relates to more standard notions}
+
+A typical definition of fairness or liveness would specify that *any* transaction should eventually accepted, without reference to adequate payment. However, since Bitcoin operates in a model with no established identities, this would be impossible due to the ability for an attacker to create sybil identities and flood the system.
 
 \subsection{How Changes are Applied}
 
@@ -82,7 +92,6 @@ Discussion of governance and the need for social out-of-band consensus to agree 
 Discussion on the forums and mailing list that provide.
 
 Ability for altcoins to develop.
-
 
 \subsection{Towards an Economic Model}
 
