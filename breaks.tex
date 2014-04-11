@@ -2,4 +2,17 @@
 
 \subsection{Attacks on Privacy}
 
+Much of the original focus on digital cash (starting with Chaum~\cite{chaum1982blind}) centered on providing anonymity (or pseudonymity) for users.
+Although Bitcoin was widely reported to provide financial privacy, the system does not in fact include any of the privacy-enhancing technique from that era; instead all transactions are published in plaintext.
+Thus a large body of work quickly established that Bitcoin transactions are highly linkable.~\cite{reid2013analysis}\anote{far more citations to add here}.
+
+Although these attacks on user privacy apply to Bitcoin in its current use, there have been proposals to add transaction privacy back in through the use of third-party mixes~\cite{mixcoin} or integration with more sophisticated cryptographic techniques; these are discussed later.
+
 \subsection{Attacks on Stability}
+Although the original Bitcoin system came with a proof of security assuming half of the network (by hashpower) follows the protocol correctly, it may be unreasonable to take this as a model assumption. Instead, the choice of users to participate correctly (or at all) are influenced by incentive mechanisms throughout the system.
+
+- The goldfinger attack, and death spiral~\cite{kroll2013bitcoin:weis}.
+
+- Majority is not enough~\cite{eyal2013majority}.
+
+- Comment about the threat of altcoins to divide participation and investment, and the CoiledCoin event as an example of this attacking altcoins. \footnote{CoiledCoin was an altcoin that was destroyed by a significant history revision attack from Eligius, a Bitcoin mining pool. \url{https://bitcointalk.org/index.php?topic=56675.msg678006\#msg678006}}
