@@ -1,0 +1,30 @@
+Bitoin SoK paper
+--
+
+
+What's an SoK paper?
+
+- Basically a survey paper, but necessarily more. See {} Oakland's SoK
+  criteria. Essentially it should also have a novel perspective.
+
+
+Our paper will be the first to systematically explore the design space
+of Bitcoin and other cryptocurrencies.
+
+Our paper has several contributions.
+- We will provide a comprehensive explanation of the Bitcoin protocol
+and ecosystem, targeting computer science researchers (as opposed to
+policy, economists, or end users). There is currently no truly great
+overview of Bitcoin that researchers can cite and point to, and as a
+result every paper has to describe Bitcoin from scratch.
+
+- We will provide novel abstractions/generalizations as a basis for
+understanding and evaluating the complexity not just Bitcoin, but also
+the significantly different related systems such as Mastercoin,
+Ethereum, Ripple, etc.
+
+- We will provide a categorization and comparison of all the
+proposed Bitcoin extensions and alternatives, both from the academic
+community and the developer community. There are a ton of great ideas
+buried in the Bitcoin dev forums and mailing lists, where it's hard
+for researchers to find them.
