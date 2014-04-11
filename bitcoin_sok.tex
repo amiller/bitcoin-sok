@@ -9,17 +9,9 @@
 %\usepackage{array}
 \usepackage{pdflscape}
 
-\usepackage{styles/pdfdraftcopy}
-\draftcolor{gray20}
-\draftstring{
-\begin{minipage}{17cm}
-\begin{center}
-\  DRAFT - \today\\Not approved for public release
-\end{center}
-\end{minipage}
-}
-\draftfontsize{36pt}
-
+\usepackage{draftwatermark}
+\SetWatermarkText{DRAFT - not for public release}
+\SetWatermarkScale{0.3}
 
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
