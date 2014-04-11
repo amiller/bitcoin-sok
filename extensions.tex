@@ -97,7 +97,6 @@ Purchases involve the transfer or exchange of Bitcoin as money, wherein a Buyer 
 
 \subsubsection{Overlay Currencies}
 Besides using Bitcoin as money, Bitcoin as a platform can also be used to maintain alternate currencies, such as personally-issued IOU coins, transferable shares in a Business, etc. A colored coin is introduced by fiat - an issuer, such as the executive of a corporation, declares that a particular quantity in the new protocol should be regarded as a currency. The protocols place restrictions on how these quantities are used in transactions, such as guaranteeing they are conserved.
-{\bf Issuer}
 
 \begin{itemize}
 \item (MasterCoin~\cite{mastercoin}) MasterCoin proposes to create overlay currencies by building an entirely separate transaction protocol that uses Bitcoin as the underlying global append-only log. The observation is that arbitrary data packets can be embedded in Bitcoin transaction messages, and given a sequential ordering based on the contents of blocks. The first valid sequence of data packets is considered authoritative. The biggest drawback to this approach is cost; because Bitcoin is used only as an append-only log, miners do not perform any validation. The validity of a particular data packet cannot be determined except with knowledge of the previous history of transactions. Therefore determining whether a MasterCoin packet represents a valid coin requires processing every Bitcoin transaction in order to determine if it is a Mastercoin transaction, and maintaining a sufficient index.
