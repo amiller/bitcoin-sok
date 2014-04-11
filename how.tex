@@ -1,12 +1,11 @@
 \section{An Introduction to Bitcoin}
+\anote{There are a few conflicting goals in this section. One is to introduce the basic terminology and concrete details about how the present Bitcoin works. Another is to introduce the key abstractions we'll use to understand Bitcoin variants. Another is to understand Bitcoin in context.}
 
-Bitcoin's underlying mechanism.
 
-Mining, transaction propagation.
+\subsection{An Alternate History of Bitcoin in Steps}
+\anote{The purpose of this section is to explain what's new about Bitcoin, and how it might have been derived systematically as an improvement to other approaches.}
 
-Introduction of currency. Use of exchanges, market places. Financial ecosystem.
-
-\subsection{A Explanation of Bitcoin in Steps}
+The goal is to have basic checking account functionality for Alice and Bob.
 
 \paragraph{Step 1: Imagine there’s a trusted third party (TTP)}
  Each participant is (somehow) assigned a single key pair which also acts as an address. The TTP allows anyone to send it messages and gives all participants a consistent view. Each participant (i.e., address) has some balance. We will defer the question of initial balances and where these balances come from.
@@ -46,13 +45,6 @@ This suggests a bootstrapping argument. If the transaction log is secure (has in
 This appears to be a virtuous cycle. On the other hand, neither system can exist without the other. If the integrity or the availability of the transaction log can be easily attacked, then we cannot expect it to maintain much value as a currency. Likewise, if the currency is not valuable as money, then it will not be an effective incentive for encouraging sufficient participation to prevent successful attacks.
 
 
-\subsection{System Attack Model and Consensus Requirements}
-
-The Bitcoin mining consensus proof from the whitepaper, assuming a majority of the hash power is ``honest''. Bitcoin's solution to the consensus problem is novel, although the proof known so far is for the wrong model (honest rather than altruistic). Given a set of rules, in a distributed system, the problem remains of how to choose a correct order of operations.
-
-Although, so far, the economic incentive system seems to work, there are only heuristics and no clear model. As best we can tell, the reasoning is circular. Incentive system is needed to make the system secure. The built-in currency that rewards participants has to be valuable for the incentive to be meaningful. The currency is valuable only if the system is secure. The ``death spiral.''
-
-
 \subsection{Law, Log, and Index: An Abstraction of Bitcoin as a Platform}
 
 Abstractly speaking, what functionality does Bitcoin -- or more importantly, the innovations embodied by it -- provide? Originally presented as a mechanism for online ``payments,'' in the abstract it is a much more versatile platform.
@@ -73,11 +65,16 @@ All three of these components are necessary, and complement each other. The sequ
 
 Since only valid transactions are included in the log, end-users (such as merchants with mobile devices) need only check that a transaction is included in order to confirm a payment. Although the log necessarily grows without bound, the mutable index does not; therefore nodes can ``prune'' old data from their main disks. These optimizations are discussed in more detail later on.
 
-Most proposals for Bitcoin-like variations, including overlay currencies such as Mastercoin and Colored Coins as well as more ambitious altcoins like Ethereum, can be described in a similar way as we will show in Section~\ref{}. Additionally, these key components provide a basis for evaluating the resource complexity of various schemes and use-cases.
+Most proposals for Bitcoin-like variations, including overlay currencies such as Mastercoin and Colored Coins as well as more ambitious altcoins like Ethereum, can be described in a similar way as we will show in Section~anote{refer}. Additionally, these key components provide a basis for evaluating the resource complexity of various schemes and use-cases.
 
 The view of Bitcoin as a platform is that the currency is only inherently useful to the extent that it allows you to pay for transaction fees. In this sense it is comparable to postage stamps.
 
-\subsection{Model Assumptions}
+
+\subsection{System Attack Model and Consensus Requirements}
+
+The Bitcoin mining consensus proof from the whitepaper, assuming a majority of the hash power is ``honest''. Bitcoin's solution to the consensus problem is novel, although the proof known so far is for the wrong model (honest rather than altruistic). Given a set of rules, in a distributed system, the problem remains of how to choose a correct order of operations.
+
+Although, so far, the economic incentive system seems to work, there are only heuristics and no clear model. As best we can tell, the reasoning is circular. Incentive system is needed to make the system secure. The built-in currency that rewards participants has to be valuable for the incentive to be meaningful. The currency is valuable only if the system is secure. The ``death spiral.''
 
 Bitcoin's assumptions are weaker than in a standard distributed system - most notably, there are no pre-established identities. On the other hand, the assumptions are about the rational preferences of population - specifically that they respond to incentives, even when the incentives are inconclusive. Seems to be circular?
 
@@ -85,16 +82,24 @@ Stabilizing consistency is weaker than a typical distributed system. In a typica
 
 A typical definition of fairness or liveness would specify that *any* transaction should eventually accepted, without reference to adequate payment. However, since Bitcoin operates in a model with no established identities, this would be impossible due to the ability for an attacker to create sybil identities and flood the system.
 
+\subsection{Concrete Details}
+- Bitcoin's underlying mechanism.
+
+- Mining, transaction propagation.
+
+- Introduction of currency. Use of exchanges, market places. Financial ecosystem.
+
 \subsection{How Changes are Applied}
 
-Discussion of governance and the need for social out-of-band consensus to agree on rule changes. Soft forks, hard forks, and policy. Very few hard forks in history.
+- Discussion of governance and the need for social out-of-band consensus to agree on rule changes. Soft forks, hard forks, and policy. Very few hard forks in history.
 
-Discussion on the forums and mailing list that provide.
+- Discussion on the forums and mailing list that provide.
 
-Ability for altcoins to develop.
+- Ability for altcoins to develop.
 
 \subsection{Towards an Economic Model}
 
-Pooled mining and infrastructure investment.
+- Pooled mining and infrastructure investment.
 
-A history of pooled mining, and what we can infer empirically about the motivations of miners? Prefer low variance.
+- A history of pooled mining, and what we can infer empirically about the motivations of miners? Prefer low variance.
+

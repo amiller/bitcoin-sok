@@ -4,7 +4,6 @@ Since Bitcoin's inception, a vibrant community of participants and open source d
 
 Two main categorizations stand out: a) there are proposals for protocols that use Bitcoin (or a variant) as a platform, and b) there are proposals for modifications to the platform itself. We treat these separately.
 
-
 \subsection{ Source Collection: Technical Discussions from the Bitcoin Community}
 Technical discussions and formal presentation of Bitcoin extension ideas are primarily conducted through the following venues:
 \begin{itemize}
@@ -54,7 +53,6 @@ Due to the need for governance, everyone to agree on the constitutional rules, t
 \item An external ``oracle,'' implemented as a trusted third party (or shared/quorum of third parties) recognizable by their public key signatures
 \item An altcoin, a separate concurrent protocol
 \end{itemize}
-
 
 This imposes a hierarchy of extensions. In our terminology, an extension to Bitcoin may require only modifications to the client - anything that modifies how a user interacts with Bitcoin can count as a modification. We do mean to rule out things like ATMs that interact with the ordinary Bitcoin client. Bitcoin, even its current form, supports a number of extensible uses. Enables protocols between individuals, use Bitcoin in some way.
 
@@ -140,9 +138,9 @@ Bitcoin is not the sole cryptocurrency, instead it must be understood as the cur
 
 \subsubsection{Other}
 \begin{itemize}
-\item (Coin Flip) Satoshi-dice
-\item (Transaction Puzzle) A special instance of a transaction puzzle could be a Vanity Address.
-\item (CommitCoin) In CommitCoin, the hash of a document is embedded in the public key of a transaction that is published and timestamped in the blockchain. The user must store the document herself, and at any later time can publish the document and prove to anyone else that the hash of the document was known previously to the timestamped date.
+\item (Coin Flip Lotteries) Using Bitcoin has a clear appeal to online gambling sites (including illicit ones), since it allows users to cash in and out without having to interact with ordinary banking institutions. While several gambling sites feature games like poker\anote{cite here} or elaborate virtual casinos~\anote{cite minecraft bitcoin casino}, some of the most popular have been very simple roulette games, such as Satoshi-dice~\anote{cite satoshi dice}. \anote{TODO: add a comment about the trend of ``provable fairness'' in Bitcoin gambling, and the way that Satoshi-dice uses Bitcoin transactions}. Multi-player lotteries of this sort can also be conducted directly on top of the Bitcoin blockchain protocol, without any counterparty risk.~\cite{fairmultiparty}
+%\item (Transaction Puzzle) Although in typical use, quantities of Bitcoin are associated with public keys such that matching signatures must be published in order to spend the coins, it is also possible to associate a quantity of Bitcoins with a puzzle (for example, finding the preimage of a hash), such that a solution to the puzzle must be published in order to claim the reward.
+\item (CommitCoin) In CommitCoin, the hash of a document is embedded in the public key of a transaction that is published and timestamped in the blockchain. The user must store the document herself, and at any later time can publish the document and prove to anyone else that the hash of the document was known previously to the timestamped date.~\cite{commitcoin}
 \end{itemize}
 
 \newcommand{\riskpower}{K}
@@ -293,6 +291,7 @@ None & Alt & & Altcoin only \\
 \end{tabular}
 \end{table}
 %\end{sidewaystable}
+\label{tbl:protocols}
 \end{landscape}
 
 
@@ -327,13 +326,13 @@ Proposed modifications to the Bitcoin platform can be evaluated according to the
 The outermost layer of the system.
 \begin{itemize}
 \item (Difficulty adjustment) Time is a critical parameter. If this is set too low, then the network does not reach consensus, or the effective power of the network against an attacker is diminished. If it is set too high, then the variance for measuring the amount of security is lower. This is set by magic parameter. How else should it be set?
-\item (Proof-of-Work System) Alternate functions based on hash function. Useful proof-of-work. Proof-of-stake. Designated party LaurieCoin, Proof of Work. 
+\item (Alternate Mining Systems) Alternate functions based on hash function, such as scrypt. Useful proof-of-work. Proof-of-stake.
   \begin{itemize}
-  \item (Proof of stake) Alternate security model. Perceived possibility of an economic attack. 
-  \item (Designated authorities) Either. Another point out is Ripple's approach to unique node lists. We do not understand the model under which these are secure. On the other hand, we don't yet have a clear model in which Bitcoin's incentives work either. 
-  \item (Useful proof of work) Bitcoin appears to be wasteful. There are two ways in which it is wasteful - one is that the energy burned is not directly useful. A common suggestion is to replace the proof of work with a search function, such that a solution would be useful, distributed search project. It has been argued (e.g., by Kroll et al) that this must be a pure public good, or else it subsidizes an attacker. Another form of waste is that the investment in more efficient mining devices has led to the development and distribution of devices that are useful for computing SHA2 and nothing else. In concurrent work we investigate the potential to replace the puzzle with a ``storage hard'' puzzle, so that mining equipment is copies of a dataset.
+  \item (Proof-of-Stake) Alternate security model. Perceived possibility of an economic attack.
+  \item (Designated authorities) Trusted (or semi-trusted) servers may be designated to receive, publish, and linearize transactions ~\cite{lauriecoin}. Another point out is Ripple's approach to unique node lists. We do not understand the model under which these are secure. On the other hand, we don't yet have a clear model in which Bitcoin's incentives work either.
+  \item (Useful proof of work) Bitcoin appears to be wasteful. There are two ways in which it is wasteful - one is that the energy burned is not directly useful. A common suggestion is to replace the proof of work with a search function, such that a solution would be useful, distributed search project. It has been argued (e.g., by Kroll et al) that this must be a pure public good, or else it subsidizes an attacker. Another form of waste is that the investment in more efficient mining devices has led to the development and distribution of devices that are useful for computing SHA2 and nothing else. Permacoin: in concurrent work we investigate the potential to replace the puzzle with a ``storage hard'' puzzle, so that mining equipment is copies of a dataset.~\cite{permacoin}
     \end{itemize}
-\item (Block Size Limit) Remove it all together?
+\item (Block Size Limit) Remove it all together? \anote{Should summarize Petertodd's arguments here}
 \item (Monetary Policy) Bonus schedule. Demurrage. Coinbase maturity. Conservation invariant.
 \item (Transaction Scripts) New op codes, including ones disabled. Other signature schemes. Access to the index? Suspended computation. Ability to refer to other scripts. Turing complete? Succinct proofs with TinyRAM/Pinocchio? Access to additional indexes?
 \end{itemize}
@@ -341,38 +340,31 @@ The outermost layer of the system.
 Not necessarily have to be linear to be useful, although some conflicts such as a double-spend require linearization.
 
 \subsubsection{Mining Behavior}
-Miners can always play dumb, and pretend it didn't hear about a transaction, and there does not seem to be a way to enforce this. This includes soft-fork and policy changes.
+Although miners are bound in many ways by the agreed-upon rules --- no miner can commit an invalid block, for example, since other miners will reject it --- miners are also given a lot of discretion, especially in the form of choosing which transactions to include in a block, and which transactions to relay. In particular, a miner can choose to ignore a transaction, and it's difficult for other miners to punish them --- perhaps the miner legitimately never received the transaction in the first place. On the other hand, miners tend to follow common conventions (known as ``miner policies'' or ``soft-fork rules'') and can in general be expected to respond to rational incentives. The simplest example of miner policy is prioritizing transactions that carry fees. Proposed variations of miner policies are enumerated as follows:
 \begin{itemize}
-\item (Transaction Preference) Priority. Fees. Dust discouragement. Refusing to mine on non-standard transactions (policy change). Probabilistic transaction validation.
-\item (Block Preference) No standard client has proposed anything other than take the longest block, and most recent one found if there is a tie. Kroll et al. argue that taking the longest block is a focal point. Miners may decide to refuse mining on blocks containing transactions they don't like. If a miner deviates from the consensus here, then it will waste its mining power. If enough take it, then it is a ``soft-fork rule change,'' can be used to enforce a subset of the rules. For example, the Eligius mining pool mines nonstandard transactions.
+\item (Transaction Preference) Priority. Fees. Dust discouragement. Refusing to mine on non-standard transactions (policy change). For example, the Eligius mining pool mines nonstandard transactions. Probabilistic transaction validation.
+\item (Block Preference) No standard client has proposed anything other than take the longest block, and most recent one found if there is a tie. Kroll et al. argue that taking the longest block is a focal point. Miners may decide to refuse mining on blocks containing transactions they don't like. If a miner deviates from the consensus here, then it will waste its mining power. If enough take it, then it is a ``soft-fork rule change,'' can be used to enforce a subset of the rules. 
 \item (Computationally Secure Verification) Commitment of index. Cryptographic improvements for validation. Efficiency Pinocchio or TinyRAM. Zero knowledge validation of commitments? ZeroCoin is a limited form of this. Compressed work sample.
-\item (Pool participation) Forms of rewards. P2Pool, pool hopping, reward schemes. Apparent desire for low variance.
+\item (Pool participation) Forms of rewards. P2Pool, pool hopping (cite meni rosenfeld), reward schemes. Apparent desire for low variance. Stratum mining protocol and getwork.
 \end{itemize}
 
 \subsubsection{P2P System}
 The system that passes around blocks and transactions. Primarily concerned with denial of service, while maintaining connectivity. Also concerned with privacy. Conceptually the entire P2P network could change, or a new P2P network could be developed, that interfaces with other Bitcoin nodes.
 \begin{itemize}
-\item (Relay Transaction/Block Preferences) Similar to mining behavior.
-\item (Header only block download)
-\item (Faster block relaying)
-\item (Misbehavior)
-\item (Client puzzles)
-\item (Stratum mining protocols)
+\item (Relay Transaction/Block Preferences) Similar to mining behavior, although applies to other nodes not just miners.
+\item (Header only block download) \anote{TODO: summarize}~\cite{headerssync}.
+\item (Faster block relaying) Fast block propagation is crucial for the network to converge on recent blocks. Christian Decker et al. have studied block propagation and proposed faster variants~\cite{decker2013information}; there is also an earlier implementation by Luke-Jr\footnote{Source code commit by Luke-Jr,\url{https://gitorious.org/bitcoin/luke-jr-bitcoin/commit/4e54ea804ccdd2223e622497f0d46cceb27b9d22}}. Greg Maxwell proposed network coding as a method to reduce the cost of transmitting blocks, assuming that a peer already knows some portion of the block.~\cite{blocknetworkcoding}
+\item (Client puzzles) Denial of Service is a common problem in networks, although fairly few of the known countermeasures are currently implemented in Bitcoin. Bitcoin nodes are essentially open to strangers, and are therefore vulnerable to resource exhaustion attacks. One countermeasure is to have a potential client solve a small proof-of-work before allocating resources. Ordinarily, such puzzles represent unrecoverable waste; on the other hand, since the Bitcoin network already makes use of puzzles, a natural approach is to ask potential clients to perform a small amount of Bitcoin mining work before allocating resources, thereby getting the benefit with no additional waste --- this general approach is known as a bread-pudding protocol.~\cite{breadpudding}
 \end{itemize}
 
 \subsubsection{Client/Agent}
 \begin{itemize}
-\item (Blockchain/Index management) Pruning and Ultraprune. LevelDB and database change.
-\item (SPV vs Full Node Security)
+%\item (Blockchain/Index management) Pruning is described in the Bitcoin whitepaper. and Ultraprune~\cite{}. LevelDB and database change.
+\item (SPV vs Full Node Security) 
 \item (Wallet, key storage) Encrypted wallet, HD wallet, brain wallet, paper wallet, etc.
 \item (Transaction Construction) Making change. This is where transaction anonymity is attacked, linking keys. Change transaction.
-\item (Hardware clients)
-\item (Decision making) Waiting 6 blocks for confirmation, or estimating an attack. Showing confirmations to the user. Snack and vending machine. SPV Security.
+\item (Hardware clients) Although most end users interface with Bitcoin using clients for general purpose computers or mobile devices, storing private keys on specialized hardware such as smart cards or secure tokens have several potential advantages. These devices may be made tamper-proof, can be kept in the user's (physical) wallet or keychain, aren't vulnerable to computer viruses affecting general purpose operating systems, need not connect directly to the internet, and may even present a more convenient user interface. Bitcoin hardware wallets include the TREZOR\footnote{TREZOR product website, \url{http://www.bitcointrezor.com/}}. Other specialized hardware Bitcoin clients include vending machines~\cite{bitcoinsnack} or ATMs~\footnote{See for example Robocoin, Genesis1, and Lamassu\anote{cites needed here}}.
+%\item (Confirmations and Decision Support) In a standard ``purchase'' use case, a merchant receives payment Waiting 6 blocks for confirmation, or estimating an attack. Showing confirmations to the user. Snack and vending machine. SPV Security.
 \end{itemize}
 
-\begin{table}
-\begin{tabular}{c}
-CommitCoin \\
-ColoredCoins \\
-\end{tabular}
-\end{table}
+
