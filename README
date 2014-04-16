@@ -72,3 +72,8 @@ place for this is in the subsection "description of the rows."
   applies to, and give examples of how to apply it? Tables with
   rows=SpecificExtensions and cols=EvaluationCriteria are particularly
   desirable.
+
+- The best way to actually stake out and submit a contribution is as a
+  github pull request. Modify some text, create a patch and a pull
+  request, and we can have a discussion inline about how to improve
+  and merge it.
