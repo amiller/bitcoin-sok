@@ -3,11 +3,35 @@ Bitoin SoK paper
 
 
 What's an SoK paper?
+===
+- Basically a really good survey paper. See Oakland's SoK
+criteria. 
+http://www.ieee-security.org/TC/SP2013/cfp.html 
 
-- Basically a survey paper, but necessarily more. See {} Oakland's SoK
-  criteria. Essentially it should also have a novel perspective.
+  Following the success of the previous years' conferences, we are also
+  soliciting papers focused on systematization of knowledge (SoK). The
+  goal of this call is to encourage work that evaluates, systematizes,
+  and contextualizes existing knowledge. These papers can provide a high
+  value to our community but may not be accepted because of a lack of
+  novel research contributions. Suitable papers include survey papers
+  that provide useful perspectives on major research areas, papers that
+  support or challenge long-held beliefs with compelling evidence, or
+  papers that provide an extensive and realistic evaluation of competing
+  approaches to solving specific problems. Submissions are encouraged to
+  analyze the current research landscape: identify areas that have
+  enjoyed much research attention, point out open areas with unsolved
+  challenges, and present a prioritization that can guide researchers to
+  make progress on solving important challenges. Submissions must be
+  distinguished by a checkbox on the submission form. In addition, the
+  paper title must have the prefix "SoK:". They will be reviewed by the
+  full PC and held to the same standards as traditional research papers,
+  except instead of emphasizing novel research contributions the
+  emphasis will be on value to the community. Accepted papers will be
+  presented at the symposium and included in the proceedings.
 
 
+What's our schtick?
+=====
 Our paper will be the first to systematically explore the design space
 of Bitcoin and other cryptocurrencies.
 
@@ -28,3 +52,19 @@ proposed Bitcoin extensions and alternatives, both from the academic
 community and the developer community. There are a ton of great ideas
 buried in the Bitcoin dev forums and mailing lists, where it's hard
 for researchers to find them.
+
+
+How to contribute?
+====
+- Contribute specific descriptions of a proposed extension. The best
+place for this is in the subsection "description of the rows."
+
+- Contribute a concise but detailed explanation of the "concrete
+  function" of Bitcoin today, especially in the "how.tex" background
+  section, such as the peer-to-peer network behavior, etc.
+
+- Suggest different evaluation strategies? For an evaluation strategy,
+  explain what kinds of extensions/modifications the evaluation
+  applies to, and give examples of how to apply it? Tables with
+  rows=SpecificExtensions and cols=EvaluationCriteria are particularly
+  desirable.
